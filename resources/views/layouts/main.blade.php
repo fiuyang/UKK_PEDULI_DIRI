@@ -47,13 +47,13 @@
             <nav class="navbar navbar-secondary navbar-expand-lg">
                 <div class="container">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('home') ? 'active' : '' }}">
                             <a href="{{ route('home') }}" class="nav-link "><i class="fas fa-home"></i><span>Home</span></a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('perjalanan') ? 'active' : '' }}">
                             <a href="{{ route('perjalanan.index') }}" class="nav-link"><i class="fas fa-paper-plane"></i><span>Catatan Perjalanan</span></a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('perjalanan/create') ? 'active' : '' }}">
                             <a href="{{ route('perjalanan.create') }}" class="nav-link"><i class="fas fa-book-open"></i><span>Isi Data</span></a>
                         </li>
                     </ul>
