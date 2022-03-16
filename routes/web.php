@@ -16,11 +16,11 @@ use App\Http\Controllers\PerjalananController;
 |
 */
 
-Route::get('login', [AuthController::class, 'index'])->name('login');
-Route::get('register',[AuthController::class, 'registerForm'])->name('register');
+Route::get('login',    [AuthController::class, 'index'])->name('login');
+Route::get('register', [AuthController::class, 'registerForm'])->name('register');
 Route::post('register',[AuthController::class, 'register'])->name('register');
-Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-Route::post('login', [AuthController::class, 'login'])->name('login');
+Route::get('logout',   [AuthController::class, 'logout'])->name('logout');
+Route::post('login',   [AuthController::class, 'login'])->name('login');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('home', [HomeController::class, 'index'])->name('home');

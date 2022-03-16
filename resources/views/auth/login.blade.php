@@ -19,11 +19,19 @@
         <section class="section">
             <div class="d-flex flex-wrap align-items-stretch">
                 <div class="col-lg-4 col-md-6 col-12 order-lg-1 min-vh-100 order-2 bg-white">
-                  <div class="p-4 m-3">
-                      <img src="{{ asset('assets/img/avatar/avatar-1.png') }}" alt="logo" width="80" class="shadow-light rounded-circle mb-5 mt-2 img-responsive center-block d-block mx-auto">
+                    <div class="p-4 m-3">
+                        <img src="{{ asset('assets/img/avatar/avatar-1.png') }}" alt="logo" width="80" class="shadow-light rounded-circle mb-5 mt-2 img-responsive center-block d-block mx-auto">
                         <h4 class="text-dark font-weight-normal mt-5 text-center">Selamat Datang Ke <span class="font-weight-bold">Peduli Diri</span></h4>
-                          <p class="text-center">Sebelum memulai, Anda harus login atau mendaftar jika Anda belum memiliki akun.</p>
+                            <p class="text-center">Sebelum memulai, Anda harus login atau mendaftar jika Anda belum memiliki akun.</p>
                         <br>
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
                         @if(session('error')) 
                             <div class="alert alert-danger alert-dismissible fade show" id="alert" role="alert">
                                 {{ session('error') }}
@@ -33,7 +41,7 @@
                             </div>
                         @endif
                         <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate="">
-                          @csrf
+                            @csrf
                             <div class="form-group">
                                 <label for="email">Email</label>
                                 <input id="email" type="email" class="form-control" name="email" placeholder="Email" tabindex="1" required autofocus>
@@ -95,7 +103,13 @@
     <script src="{{asset('assets/js/scripts.js')}}"></script>
     <script src="{{asset('assets/js/custom.js')}}"></script>
 
+    <script>
+        setTimeout(function() {
+            $('.alert').slideUp();
+        }, 5000);
+    </script>
     <!-- Page Specific JS File -->
 </body>
 
 </html>
+

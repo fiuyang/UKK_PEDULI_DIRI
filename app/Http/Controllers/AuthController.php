@@ -68,8 +68,8 @@ class AuthController extends Controller
             'password' => bcrypt($request->password),
         ]);
         if($user) {
-            session()->flash('success', 'Kamu Berhasil Membuat Akun');
-            return redirect()->route('login');
+            return redirect()->route('login')->with('success', 'Kamu Berhasil Membuat Akun');
+            // session()->flash('success', 'Kamu Berhasil Membuat Akun');
         } else {
             session()->flash('errors','Register gagal! Silahkan ulangi beberapa saat lagi');
             return redirect()->route('register');

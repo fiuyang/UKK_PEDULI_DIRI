@@ -32,24 +32,24 @@
                             </div>
 
                             <div class="card-body">
-                                @if (session('success'))
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        {{ session('success') }}
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    @endif
-                                    @if($errors->any())
-                                    <div class="alert alert-danger" role="alert">
-                                        <ul>
-                                            @foreach($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
+                                @if(session('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ session('success') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
                                 @endif
-                                <form method="POST" action="{{ route('register') }}">
+                                @if($errors->any())
+                                <div class="alert alert-danger" role="alert">
+                                    <ul>
+                                        @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @endif
+                                <form method="POST" action="{{ route('register') }}" class="needs-validation" novalidate="">
                                     @csrf
                                     <div class="row">
                                         <div class="form-group col-6">
@@ -87,6 +87,11 @@
                                         <button type="submit" class="btn btn-primary btn-lg btn-block">
                                             Daftar
                                         </button>
+                                    </div>
+                                    <div class="mt-5 text-center">
+                                        <div class="mb-5 text-danger">
+                                        </div>
+                                        Sudah Punya Akun? <a href="{{ route('login') }}">Kembali</a>
                                     </div>
                                 </form>
                             </div>

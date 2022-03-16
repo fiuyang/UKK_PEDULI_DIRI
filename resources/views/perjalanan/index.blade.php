@@ -50,6 +50,10 @@
 @section('script')
 <script>
 
+    setTimeout(function() {
+        $('.alert').slideUp();
+    }, 5000);
+
     $(document).ready(function() {
         dataTable = $('#table').DataTable({
             processing: true,
