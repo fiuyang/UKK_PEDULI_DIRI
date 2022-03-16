@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <title>Peduli Diri - @yield('title')</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+        {{-- <img src="{{ asset('assets/img/peduli_diri.svg') }}" alt="logo" width="50" class="img-responsive"> --}}
     <link rel="stylesheet" href="{{ asset('assets/node_modules/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/node_modules/fontawesome/css/all.min.css')}} ">
     <link rel="stylesheet" href="{{ asset('assets/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}} ">
@@ -21,7 +22,7 @@
         <div class="main-wrapper container">
             <div class="navbar-bg"></div>
             <nav class="navbar navbar-expand-lg main-navbar">
-                <a href="" class="navbar-brand sidebar-gone-hide">PEDULI DIRI</a>
+                <a href="{{ route('home') }}" class="navbar-brand sidebar-gone-hide">PEDULI DIRI</a>
                 <div class="navbar-nav">
                     <a href="#" class="nav-link sidebar-gone-show" data-toggle="sidebar"><i class="fas fa-bars"></i></a>
                 </div>
@@ -32,7 +33,7 @@
 
                     <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                             <img alt="image" src="{{ asset('assets/img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
-                            <div class="d-sm-none d-lg-inline-block">Hi, {{ Auth::user()->name }}</div>
+                            <div class="d-sm-none d-lg-inline-block">Hi, {{ Auth::user()->username }}</div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a href="javascript:void(0)" onclick="logout()" role="button" class="dropdown-item has-icon text-danger">
@@ -56,6 +57,7 @@
                             <a href="{{ route('perjalanan.create') }}" class="nav-link"><i class="fas fa-book-open"></i><span>Isi Data</span></a>
                         </li>
                     </ul>
+                    <img src="{{ asset('assets/img/peduli_diri.svg') }}" alt="logo" width="180" class="mb-5 mt-5 img-responsive">
                 </div>
             </nav>
 

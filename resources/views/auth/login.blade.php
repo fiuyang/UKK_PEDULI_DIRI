@@ -43,10 +43,8 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="d-block">
-                                    <label for="password" class="control-label">Password</label>
-                                </div>
-                                <input id="password" type="password" class="form-control" name="password" placeholder="Password" tabindex="2">
+                                <label for="password">Password</label>
+                                <input id="password" type="password" class="form-control" name="password" placeholder="Password" tabindex="2" required autofocus>
                                 <div class="invalid-feedback">
                                     Tolong Isi Password anda
                                 </div>
@@ -86,6 +84,7 @@
             </div>
         </section>
     </div>
+
 
     <script src="{{asset('assets/third-party/jquery.min.js')}}"></script>
     <script src="{{asset('assets/third-party/bootstrap/js/bootstrap.min.js')}}"></script>

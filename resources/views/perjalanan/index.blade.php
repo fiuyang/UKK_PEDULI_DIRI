@@ -6,12 +6,23 @@
         <div class="card">
             <div class="card-header">
                 <div class="form-group">
-                    <button class="btn btn-primary btn-sm link-button" type="button" data-href="{{ route('perjalanan.create')}}">
-                            Create 
-                    </button>
+                    <a href="{{ route('perjalanan.create') }}" class="btn btn-primary btn-sm">
+                        Create 
+                    </a>
                 </div>
             </div>
             <div class="card-body">
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span class="alert-inner--icon"><i class="ni ni-like-2"></i></span>
+                        <span class="alert-inner--text">
+                            {{ session('success') }}
+                        </span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="table-responsive">
                     <table id="table" class="table table-striped" width="100%">
                         <thead>
@@ -39,14 +50,7 @@
 @section('script')
 <script>
 
-    $(".link-button").on('click',function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        window.location.href = $(this).data('href');
-    });
-
     $(document).ready(function() {
-        // init datatable.
         dataTable = $('#table').DataTable({
             processing: true,
             serverSide: true,
@@ -65,5 +69,45 @@
             ]
         });
     });
+
+    function deleteConfirmation(id) {
+        swal.fire({
+            title: 'Delete',
+            text: 'Apakah anda yakin akan menghapus data ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#929ba1',
+            confirmButtonText: 'Oke'
+        }).then(function (e) {
+            if (e.value === true) {
+                var token = $("meta[name='csrf-token']").attr("content");
+                $.ajax({
+                    type: 'DELETE',
+                    url: "perjalanan/delete/"+id,
+                    data: {
+                        _token: token
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                text: ""+response.message+"",
+                                icon: 'success',
+                                title: 'Deleted',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            dataTable.ajax.reload();
+                        } else {
+                            swal.fire("Error!", 'Masih ada yang salah.', "error");
+                        }
+                    },
+                    error: function (response) {
+                        swal.fire("Error!", 'Masih ada yang salah.', "error");
+                    }
+                });
+            } 
+        })
+    }
 </script>
 @endsection

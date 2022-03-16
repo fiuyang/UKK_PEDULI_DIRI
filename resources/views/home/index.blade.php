@@ -14,9 +14,9 @@
                             
                         </div>
                     </div>
-                </div>
-                <div class="text-right mt-5 mr-3"> 
-                    <a href="{{ route('perjalanan.create') }}" class="btn btn-primary">Isi Catatan Perjalanan</a>
+                    <div class="text-right mt-3"> 
+                        <a href="{{ route('perjalanan.create') }}" class="btn btn-primary">Isi Catatan Perjalanan</a>
+                    </div>
                 </div>
             </div>
         </div>

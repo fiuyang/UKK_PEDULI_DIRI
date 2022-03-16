@@ -25,5 +25,6 @@ Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::middleware(['auth'])->group(function () {
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('/perjalanan/get', [PerjalananController::class, 'get'])->name('perjalanan.get');
+    Route::delete('perjalanan/delete/{id}', [PerjalananController::class, 'destroy']);
     Route::resource('/perjalanan', PerjalananController::class);
 });

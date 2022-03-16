@@ -25,8 +25,9 @@
                     </ul>
                 </div>
                 @endif
-                <form method="POST" action="{{ route('perjalanan.store') }}">
+                <form method="POST" action="{{ route('perjalanan.update', $perjalanan->id) }}" autocomplete="off">
                     @csrf
+                    @method('PUT')
                     <div class="form-group">
                         <label for="tanggal">Tanggal</label>
                         <div class="input-group">
@@ -35,7 +36,7 @@
                                     <i class="fas fa-calendar"></i>
                                 </div>
                             </div>
-                            <input type="text" class="form-control datepicker" name="tanggal" id="tanggal" value="{{ old('tanggal') }}">
+                            <input type="text" class="form-control datepicker" name="tanggal" id="tanggal" value="{{ old('tanggal',$perjalanan->tanggal) }}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -46,19 +47,19 @@
                                     <i class="fas fa-clock"></i>
                                 </div>
                             </div>
-                            <input type="time" class="form-control" name="jam" id="jam" value="{{ old('jam') }}">
+                            <input type="time" class="form-control" name="jam" id="jam" value="{{ old('jam',$perjalanan->jam) }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="lokasi">Lokasi Yang Dikunjungi</label>
-                        <textarea class="form-control" id="lokasi" name="lokasi" style="height:150px" value="{{ old('lokasi') }}"></textarea>
+                        <textarea class="form-control" id="lokasi" name="lokasi" style="height:150px">{{ old('lokasi',$perjalanan->lokasi) }}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="suhu_tubuh">Suhu Tubuh</label>
-                        <input type="text" class="form-control" name="suhu_tubuh" id="suhu_tubuh" value="{{ old('suhu_tubuh') }}">
+                        <input type="float" class="form-control" name="suhu_tubuh" id="suhu_tubuh" value="{{ old('suhu_tubuh',$perjalanan->suhu_tubuh) }}">
                     </div>
                     <div class="text-right">
-                        <a href="{{ route('perjalanan.index') }}" class="btn btn-danger">Kembali</a>
+                        <a href="{{ route('perjalanan.index') }}" class="btn btn-danger" button="submit">Kembali</a>
                         <button class="btn btn-primary" type="submit">Store</button>
                     </div>
                 </form>

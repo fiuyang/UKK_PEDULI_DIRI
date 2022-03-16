@@ -22,7 +22,7 @@ class AuthController extends Controller
             return redirect()->back();
         }
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->route('perjalanan.index');
+            return redirect()->route('home');
         } else {
             return redirect()->route('login')->with('error', 'email atau password salah!!');
         }
@@ -42,10 +42,23 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'username' => 'required',
-            'nik'      => 'required|unique:users',
+            'username' => 'required|min:8|max:20',
+            'nik'      => 'required|unique:users|min:16|numeric',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
+        ],[
+            'email.required' => 'Email tidak boleh kosong',
+            'email.email' => 'Email harus berupa email',
+            'email.unique' => 'Email sudah terdaftar',
+            'username.required' => 'Username tidak boleh kosong',
+            'username.min' => 'Username minimal 8 karakter',
+            'username.max' => 'Username maksimal 20 karakter',
+            'nik.required' => 'NIK tidak boleh kosong',
+            'nik.unique' => 'NIK sudah terdaftar',
+            'nik.numeric' => 'NIK harus berupa angka',
+            'nik.min' => 'NIK harus 16 digit',
+            'password.required' => 'Password tidak boleh kosong',
+            'password.min' => 'Password minimal 8 karakter'
         ]);
 
         $user = User::create([
@@ -54,7 +67,12 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-        session()->flash('message', 'Kamu Berhasil Membuat Akun');
-        return redirect()->route('login');
+        if($user) {
+            session()->flash('success', 'Kamu Berhasil Membuat Akun');
+            return redirect()->route('login');
+        } else {
+            session()->flash('errors','Register gagal! Silahkan ulangi beberapa saat lagi');
+            return redirect()->route('register');
+        }
     }
 }

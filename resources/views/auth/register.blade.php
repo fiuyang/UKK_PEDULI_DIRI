@@ -40,12 +40,13 @@
                                         </button>
                                     </div>
                                     @endif
-                                    @if (session('error'))
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        {{ session('error') }}
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                    @if($errors->any())
+                                    <div class="alert alert-danger" role="alert">
+                                        <ul>
+                                            @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
                                     </div>
                                 @endif
                                 <form method="POST" action="{{ route('register') }}">
@@ -53,14 +54,14 @@
                                     <div class="row">
                                         <div class="form-group col-6">
                                             <label for="email">Email</label>
-                                            <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
+                                            <input id="email" type="email" class="form-control" name="email" tabindex="1" autofocus value="{{ old('email') }}">
                                             <div class="invalid-feedback">
                                                 Tolong Isi Email anda
                                             </div>
                                         </div>
                                         <div class="form-group col-6">
                                             <label for="username">Username</label>
-                                            <input id="username" type="text" class="form-control" name="username" tabindex="1" required autofocus>
+                                            <input id="username" type="text" class="form-control" name="username" tabindex="1" autofocus value="{{ old('username') }}">
                                             <div class="invalid-feedback">
                                                 Tolong Isi Username anda
                                             </div>
@@ -69,53 +70,16 @@
                                     <div class="row">
                                         <div class="form-group col-6">
                                             <label for="nik">Nik</label>
-                                            <input id="nik" type="text" class="form-control" name="nik" tabindex="1" required autofocus>
+                                            <input id="nik" type="number" class="form-control" name="nik" tabindex="1" autofocus value="{{ old('nik') }}">
                                             <div class="invalid-feedback">
                                                 Tolong Isi Nik anda
                                             </div>
                                         </div>
                                         <div class="form-group col-6">
-                                            <label>Tanggal Lahir</label>
-                                            <input type="date" name="tanggal_lahir" class="form-control <?php if (form_error('tanggal_lahir')) {
-                                                echo('is-invalid');
-                                            }?>" placeholder="Masukkan Tanggal Lahir" value="<?=set_value('tanggal_lahir')?>">
+                                            <label for="password">Password</label>
+                                            <input id="password" type="password" class="form-control" name="password" tabindex="1" autofocus value="{{ old('password') }}">
                                             <div class="invalid-feedback">
-                                                <?= form_error('tanggal_lahir') ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-6">
-                                            <label>Jenis Kelamin</label>
-                                            <select class="form-control select2 <?php if (form_error('jk')) {
-                                                echo('is-invalid');
-                                            }?>" name="jk" placeholder="Masukkan JK">
-                                                <option selected disabled value="">--Pilih--</option>
-                                                <option <?= set_select('jk', 'Laki-Laki'); ?>>Laki-Laki</option>
-                                                <option <?= set_select('jk','Perempuan');?>>Perempuan</option>
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                <?=form_error('jk')?>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-6">
-                                            <label for="no_telepon">Nomor Telepon</label>
-                                            <input id="no_telepon" type="number" class="form-control <?php if (form_error('no_telepon')) {
-                                                echo('is-invalid');
-                                            }?>" name="no_telepon" value="<?=set_value('no_telepon')?>" placeholder="Masukkan Nomor Telepon">
-                                            <div class="invalid-feedback">
-                                                <?= form_error('no_telepon') ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-12">
-                                            <label>Alamat</label>
-                                            <textarea name="alamat" style="height:125px;" class="form-control <?php if (form_error('alamat')) {
-                                                echo('is-invalid');
-                                            }?>" placeholder="Masukkan Alamat Lengkap" ><?=set_value('alamat')?></textarea>
-                                            <div class="invalid-feedback">
-                                                <?= form_error('alamat') ?>
+                                                Tolong Isi Password anda
                                             </div>
                                         </div>
                                     </div>
