@@ -7,6 +7,7 @@
     <title>Peduli Diri - @yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
         {{-- <img src="{{ asset('assets/img/peduli_diri.svg') }}" alt="logo" width="50" class="img-responsive"> --}}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
     <link rel="stylesheet" href="{{ asset('assets/node_modules/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/node_modules/fontawesome/css/all.min.css')}} ">
     <link rel="stylesheet" href="{{ asset('assets/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}} ">
@@ -22,7 +23,7 @@
         <div class="main-wrapper container">
             <div class="navbar-bg"></div>
             <nav class="navbar navbar-expand-lg main-navbar">
-                <a href="{{ route('home') }}" class="navbar-brand sidebar-gone-hide">PEDULI DIRI</a>
+                <a href="{{ route('dashboard') }}" class="navbar-brand sidebar-gone-hide">PEDULI DIRI</a>
                 <div class="navbar-nav">
                     <a href="#" class="nav-link sidebar-gone-show" data-toggle="sidebar"><i class="fas fa-bars"></i></a>
                 </div>
@@ -47,6 +48,17 @@
             <nav class="navbar navbar-secondary navbar-expand-lg">
                 <div class="container">
                     <ul class="navbar-nav">
+                        @if (Auth::guard('admin')->user()->level == 'admin')
+                        <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-home"></i><span>Home</span></a>
+                        </li>
+                        <li class="nav-item {{ Request::is('perjalanan') ? 'active' : '' }}">
+                            <a href="{{ route('perjalanan.index') }}" class="nav-link"><i class="fas fa-paper-plane"></i><span>Catatan Perjalanan</span></a>
+                        </li>
+                        <li class="nav-item {{ Request::is('perjalanan/create') ? 'active' : '' }}">
+                            <a href="{{ route('perjalanan.create') }}" class="nav-link"><i class="fas fa-book-open"></i><span>Isi Data</span></a>
+                        </li>
+                        {{-- @elseif(Auth::guard('user')->user()->level == 'user')
                         <li class="nav-item {{ Request::is('home') ? 'active' : '' }}">
                             <a href="{{ route('home') }}" class="nav-link "><i class="fas fa-home"></i><span>Home</span></a>
                         </li>
@@ -55,7 +67,8 @@
                         </li>
                         <li class="nav-item {{ Request::is('perjalanan/create') ? 'active' : '' }}">
                             <a href="{{ route('perjalanan.create') }}" class="nav-link"><i class="fas fa-book-open"></i><span>Isi Data</span></a>
-                        </li>
+                        </li> --}}
+                        @endif
                     </ul>
                     <img src="{{ asset('assets/img/peduli_diri.svg') }}" alt="logo" width="180" class="mb-5 mt-5 img-responsive">
                 </div>
@@ -74,7 +87,7 @@
             </div>
             <footer class="main-footer">
                 <div class="footer-left">
-                    Copyright &copy; {{ date('Y') }} <div class="bullet">Development By <a href="https:://github.com/bayudiarata">Bayudiarta Laksono</a>
+                    Copyright &copy; {{ date('Y') }} <div class="bullet">Development By <a href="https://github.com/bayudiartaa" target="_blank">Bayudiarta Laksono</a>
                 </div>
                 <div class="footer-right">
                     2.3.0
@@ -99,6 +112,7 @@
     <!-- Template JS File -->
     <script src="{{asset('assets/js/scripts.js')}}"></script>
     <script src="{{asset('assets/js/custom.js')}}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
     @yield('script')
     <script>

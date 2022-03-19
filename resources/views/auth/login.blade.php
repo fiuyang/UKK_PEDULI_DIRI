@@ -43,11 +43,12 @@
                         <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate="">
                             @csrf
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input id="email" type="email" class="form-control" name="email" placeholder="Email" tabindex="1" required autofocus>
+                                <label for="no_telepon">Email atau No Telepon</label>
+                                <input id="no_telepon" type="text" class="form-control" name="no_telepon" placeholder="Email atau No Telepon" tabindex="1" required autofocus>
                                 <div class="invalid-feedback">
-                                    Tolong Isi Email anda
+                                    Tolong Isi Email atau No Telepon anda
                                 </div>
+                                <span id="message"></span>
                             </div>
 
                             <div class="form-group">

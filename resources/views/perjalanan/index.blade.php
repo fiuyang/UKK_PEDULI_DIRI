@@ -74,21 +74,21 @@
         });
     });
 
-    function deleteConfirmation(id) {
+    function destroy(id) {
         swal.fire({
             title: 'Delete',
             text: 'Apakah anda yakin akan menghapus data ini?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#929ba1',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
             confirmButtonText: 'Oke'
         }).then(function (e) {
             if (e.value === true) {
                 var token = $("meta[name='csrf-token']").attr("content");
                 $.ajax({
                     type: 'DELETE',
-                    url: "perjalanan/delete/"+id,
+                    url: "perjalanan/"+id,
                     data: {
                         _token: token
                     },

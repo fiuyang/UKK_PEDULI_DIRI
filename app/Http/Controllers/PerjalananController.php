@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Perjalanan;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class PerjalananController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth:admin']);
     }
     /**
      * Display a listing of the resource.
@@ -28,12 +29,22 @@ class PerjalananController extends Controller
     {
         $data = Perjalanan::orderBy('id', 'ASC');
         return DataTables::of($data)
+            ->addColumn('tanggal', function ($request) {
+                $date = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('d-m-Y');
+                return $date; 
+            })
+            ->addColumn('jam', function ($request) {
+                $time = Carbon::createFromFormat('H:i:s', $request->jam)->format('H:i');
+                return $time;
+            })
             ->addColumn('actions', function ($data) {
                 return '<a href="'. route('perjalanan.edit', $data->id) . '" class="btn btn-info">Edit</a>
-                        <button class="btn btn-danger" onclick="deleteConfirmation('.$data->id.')" type="button">Delete</button>';
+                        <button class="btn btn-danger" onclick="destroy('.$data->id.')" type="button">Delete</button>
+                        <a href="'. route('generate',$data->id) .'" class="btn btn-primary">Generate</a>';
                 
             })
             ->rawColumns(['actions'])
+            ->addIndexColumn()
             ->make(true);
     }
 
@@ -60,7 +71,7 @@ class PerjalananController extends Controller
 
         $data = [
             'tanggal' => $request->tanggal,
-            'jam' => $request->jam,
+            'jam' => preg_replace("/[^0-9]/", "", $request->jam),
             'lokasi' => $request->lokasi,
             'suhu_tubuh' => is_double($request->suhu_tubuh) ? $request->suhu_tubuh : doubleval($request->suhu_tubuh),
         ];
@@ -76,6 +87,13 @@ class PerjalananController extends Controller
     public function create()
     {
         return view('perjalanan.create');
+    }
+
+    public function generate($id)
+    {
+        $data = Perjalanan::findOrFail($id);
+        $qrcode = QrCode::size(400)->generate($data['tanggal'].' '.$data['jam'].' '.$data['lokasi'].' '.$data['suhu_tubuh']);
+        return view('qrcode', compact('qrcode'));
     }
 
     /**
@@ -124,9 +142,9 @@ class PerjalananController extends Controller
 
         $data = [
             'tanggal' => $request->tanggal,
-            'jam' => $request->jam,
+            'jam' => preg_replace("/[^0-9]/", "", $request->jam),
             'lokasi' => $request->lokasi,
-            'suhu_tubuh' => $request->suhu_tubuh,
+            'suhu_tubuh' => is_double($request->suhu_tubuh) ? $request->suhu_tubuh : doubleval($request->suhu_tubuh),
         ];
 
         $perjalanan = Perjalanan::findOrFail($id);

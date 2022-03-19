@@ -18,8 +18,10 @@ class CreateUsersTable extends Migration
             $table->string('username');
             $table->string('nik')->unique();
             $table->string('email')->unique();
+            $table->string('no_telepon')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('level', ['admin', 'user']);
             $table->rememberToken();
             $table->timestamps();
         });

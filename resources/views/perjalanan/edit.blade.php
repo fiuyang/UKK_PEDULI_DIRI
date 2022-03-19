@@ -47,7 +47,7 @@
                                     <i class="fas fa-clock"></i>
                                 </div>
                             </div>
-                            <input type="time" class="form-control" name="jam" id="jam" value="{{ old('jam',$perjalanan->jam) }}">
+                            <input type="text" class="form-control time" name="jam" id="jam" value="{{ old('jam',$perjalanan->jam) }}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -71,6 +71,15 @@
 
 @section('script')
 <script>
+
+    $(document).ready(function() {
+        $('.time').timepicker({
+            timeFormat: 'hh:mm:ss p',
+            dropdown: true,
+            scrollbar: true
+        });
+    });
+
     $(document).ready(function () {
         $('.datepicker').daterangepicker({
             singleDatePicker: true,
@@ -80,5 +89,9 @@
             }
         });
     });
+
+    // setTimeout(function() {
+    //     $('.alert').slideUp();
+    // }, 5000);
 </script>    
 @endsection

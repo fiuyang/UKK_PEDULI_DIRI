@@ -18,7 +18,9 @@ class DatabaseSeeder extends Seeder
             'username' => 'admin',
             'nik' => '038383838383',
             'email' => 'admin@gmail.com',
+            'no_telepon' => '0895387117089',
             'password' => bcrypt('password'),
+            'level' => 'admin'
         ]);
         // \App\Models\User::factory(10)->create();
     }

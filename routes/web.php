@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PerjalananController;
 
 /*
@@ -16,15 +17,21 @@ use App\Http\Controllers\PerjalananController;
 |
 */
 
-Route::get('login',    [AuthController::class, 'index'])->name('login');
+Route::get('/login',    [AuthController::class, 'index'])->name('login');
 Route::get('register', [AuthController::class, 'registerForm'])->name('register');
 Route::post('register',[AuthController::class, 'register'])->name('register');
 Route::get('logout',   [AuthController::class, 'logout'])->name('logout');
 Route::post('login',   [AuthController::class, 'login'])->name('login');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('home', [HomeController::class, 'index'])->name('home');
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
     Route::get('/perjalanan/get', [PerjalananController::class, 'get'])->name('perjalanan.get');
-    Route::delete('perjalanan/delete/{id}', [PerjalananController::class, 'destroy']);
+    Route::get('qrcode/{id}', [PerjalananController::class, 'generate'])->name('generate');
     Route::resource('/perjalanan', PerjalananController::class);
 });
+
+// Route::middleware(['auth:user'])->group(function () {
+//     Route::get('home', [HomeController::class, 'index'])->name('home');
+//     Route::get('/perjalanan/get', [PerjalananController::class, 'get'])->name('perjalanan.get');
+//     Route::resource('/perjalanan', PerjalananController::class);
+// });

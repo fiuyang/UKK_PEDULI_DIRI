@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -18,10 +19,26 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $request->validate([
+            'no_telepon' => 'required',
+            'password' => 'required',
+        ]);
+
+        $data = [
+            'no_telepon' => $request->no_telepon,
+            'password' => $request->password,
+        ];
+
+        $fieldType = filter_var($request->no_telepon, FILTER_VALIDATE_EMAIL) ? 'email' : 'no_telepon';
+
         if (Auth::check() == true) {
             return redirect()->back();
         }
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if (Auth::guard('admin')->attempt(array($fieldType => $data['no_telepon'], 'password' => $data['password'])))
+        {
+            return redirect()->route('dashboard');
+        } else if (Auth::guard('user')->attempt(array($fieldType => $data['no_telepon'], 'password' => $data['password'])))
+        {
             return redirect()->route('home');
         } else {
             return redirect()->route('login')->with('error', 'email atau password salah!!');
@@ -46,6 +63,7 @@ class AuthController extends Controller
             'nik'      => 'required|unique:users|min:16|numeric',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
+            'no_telepon' => ['required', 'regex:/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/', 'unique:users'],
         ],[
             'email.required' => 'Email tidak boleh kosong',
             'email.email' => 'Email harus berupa email',
@@ -58,14 +76,18 @@ class AuthController extends Controller
             'nik.numeric' => 'NIK harus berupa angka',
             'nik.min' => 'NIK harus 16 digit',
             'password.required' => 'Password tidak boleh kosong',
-            'password.min' => 'Password minimal 8 karakter'
+            'password.min' => 'Password minimal 8 karakter',
+            'no_telepon.required' => 'No Telepon tidak kosong',
+            'no_telepon.regex' => 'No Telepon tidak valid',
         ]);
 
         $user = User::create([
             'username' => $request->username ,
             'nik' => $request->nik,
             'email' => $request->email,
+            'no_telepon' => $request->no_telepon,
             'password' => bcrypt($request->password),
+            // 'role' => 'user'
         ]);
         if($user) {
             return redirect()->route('login')->with('success', 'Kamu Berhasil Membuat Akun');
