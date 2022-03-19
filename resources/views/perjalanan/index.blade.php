@@ -6,9 +6,11 @@
         <div class="card">
             <div class="card-header">
                 <div class="form-group">
+                    @if(Auth::user()->level == 'admin')
                     <a href="{{ route('perjalanan.create') }}" class="btn btn-primary btn-sm">
                         Create 
                     </a>
+                    @endif
                 </div>
             </div>
             <div class="card-body">

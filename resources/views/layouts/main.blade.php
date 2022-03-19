@@ -23,7 +23,7 @@
         <div class="main-wrapper container">
             <div class="navbar-bg"></div>
             <nav class="navbar navbar-expand-lg main-navbar">
-                <a href="{{ route('dashboard') }}" class="navbar-brand sidebar-gone-hide">PEDULI DIRI</a>
+                <a href="#" class="navbar-brand sidebar-gone-hide">PEDULI DIRI</a>
                 <div class="navbar-nav">
                     <a href="#" class="nav-link sidebar-gone-show" data-toggle="sidebar"><i class="fas fa-bars"></i></a>
                 </div>
@@ -48,26 +48,24 @@
             <nav class="navbar navbar-secondary navbar-expand-lg">
                 <div class="container">
                     <ul class="navbar-nav">
-                        @if (Auth::guard('admin')->user()->level == 'admin')
+                        @if (Auth::user()->level == 'admin')
+                        <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-dashboard"></i><span>Dashboard</span></a>
+                        </li>
+                        <li class="nav-item {{ Request::is('perjalanan') ? 'active' : '' }}">
+                            <a href="{{ route('perjalanan.index') }}" class="nav-link"><i class="fas fa-paper-plane"></i><span>Catatan Perjalanan</span></a>
+                        </li>
+                        <li class="nav-item {{ Request::is('perjalanan/create') ? 'active' : '' }}">
+                            <a href="{{ route('perjalanan.create') }}" class="nav-link"><i class="fas fa-book-open"></i><span>Isi Data</span></a>
+                        </li>
+                        @endif
+                        @if (Auth::user()->level == 'user')
                         <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
                             <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-home"></i><span>Home</span></a>
                         </li>
                         <li class="nav-item {{ Request::is('perjalanan') ? 'active' : '' }}">
                             <a href="{{ route('perjalanan.index') }}" class="nav-link"><i class="fas fa-paper-plane"></i><span>Catatan Perjalanan</span></a>
                         </li>
-                        <li class="nav-item {{ Request::is('perjalanan/create') ? 'active' : '' }}">
-                            <a href="{{ route('perjalanan.create') }}" class="nav-link"><i class="fas fa-book-open"></i><span>Isi Data</span></a>
-                        </li>
-                        {{-- @elseif(Auth::guard('user')->user()->level == 'user')
-                        <li class="nav-item {{ Request::is('home') ? 'active' : '' }}">
-                            <a href="{{ route('home') }}" class="nav-link "><i class="fas fa-home"></i><span>Home</span></a>
-                        </li>
-                        <li class="nav-item {{ Request::is('perjalanan') ? 'active' : '' }}">
-                            <a href="{{ route('perjalanan.index') }}" class="nav-link"><i class="fas fa-paper-plane"></i><span>Catatan Perjalanan</span></a>
-                        </li>
-                        <li class="nav-item {{ Request::is('perjalanan/create') ? 'active' : '' }}">
-                            <a href="{{ route('perjalanan.create') }}" class="nav-link"><i class="fas fa-book-open"></i><span>Isi Data</span></a>
-                        </li> --}}
                         @endif
                     </ul>
                     <img src="{{ asset('assets/img/peduli_diri.svg') }}" alt="logo" width="180" class="mb-5 mt-5 img-responsive">

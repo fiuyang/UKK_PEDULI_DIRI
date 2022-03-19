@@ -5,16 +5,13 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Perjalanan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class PerjalananController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware(['auth:admin']);
-    }
     /**
      * Display a listing of the resource.
      *
@@ -38,9 +35,17 @@ class PerjalananController extends Controller
                 return $time;
             })
             ->addColumn('actions', function ($data) {
-                return '<a href="'. route('perjalanan.edit', $data->id) . '" class="btn btn-info">Edit</a>
-                        <button class="btn btn-danger" onclick="destroy('.$data->id.')" type="button">Delete</button>
-                        <a href="'. route('generate',$data->id) .'" class="btn btn-primary">Generate</a>';
+                $actions = "";
+                if (Auth::user()->level == 'admin') {
+                    $actions = '<a href="' . route('perjalanan.edit', $data->id) . '" class="btn btn-info">Edit</a>
+                                <button class="btn btn-danger" onclick="destroy(' . $data->id . ')" type="button">Delete</button>
+                                <a href="' . route('generate', $data->id) . '" class="btn btn-primary">Generate</a>
+                                <a href="' . route('qrcode',  $data->id) . '" class="btn btn-info">QrCode</a>';
+                } 
+                if(Auth::user()->level == 'user') {
+                    $actions = '<a href="' . route('qrcode',  $data->id) . '" class="btn btn-info">QrCode</a>';
+                }
+                return $actions;
                 
             })
             ->rawColumns(['actions'])
@@ -92,8 +97,20 @@ class PerjalananController extends Controller
     public function generate($id)
     {
         $data = Perjalanan::findOrFail($id);
-        $qrcode = QrCode::size(400)->generate($data['tanggal'].' '.$data['jam'].' '.$data['lokasi'].' '.$data['suhu_tubuh']);
-        return view('qrcode', compact('qrcode'));
+        $qrcode = QrCode::size(400)->errorCorrection('H')
+                ->generate($data['tanggal'] . ' ' . $data['jam'] . ' ' . $data['lokasi'] . ' ' . $data['suhu_tubuh']);
+        $output_file = '/img/qr-code/img-' . time() . '.png';
+        Storage::disk('local')->put($output_file, $qrcode); 
+        return view('qrcode', compact('data','qrcode'));
+    }
+
+    public function qrcode($id)
+    {
+        $data = Perjalanan::findOrFail($id);
+        $qrcode = QrCode::size(400)->errorCorrection('H')
+            ->generate($data['tanggal'] . ' ' . $data['jam'] . ' ' . $data['lokasi'] . ' ' . $data['suhu_tubuh']);
+        // Storage::disk('local')->put($output_file, $qrcode); 
+        return view('qrcode', compact('data', 'qrcode'));
     }
 
     /**

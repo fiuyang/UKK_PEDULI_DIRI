@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','Home')
+@section('title','Dashboard')
 @section('content')
 <div class="row">
     <div class="col-lg-12">
@@ -11,15 +11,17 @@
                         <div class="hero-inner">
                             <h2>Welcome, {{ Auth::user()->username }}</h2>
                             <p class="lead">Anda Telah Berhasil Masuk Ke Aplikasi Peduli Diri</p>
-                            
                         </div>
                     </div>
+                    @if(Auth::user()->level == 'admin')
                     <div class="text-right mt-3"> 
                         <a href="{{ route('perjalanan.create') }}" class="btn btn-primary">Isi Catatan Perjalanan</a>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
-    @endsection
+</div>
+@endsection
     

@@ -23,15 +23,14 @@ Route::post('register',[AuthController::class, 'register'])->name('register');
 Route::get('logout',   [AuthController::class, 'logout'])->name('logout');
 Route::post('login',   [AuthController::class, 'login'])->name('login');
 
-Route::middleware(['auth:admin'])->group(function () {
-    Route::get('dashboard', DashboardController::class)->name('dashboard');
+Route::group(['middleware' => 'auth:admin'], function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('qrcode/{id}', [PerjalananController::class, 'qrcode'])->name('qrcode');
+    Route::get('generate/{id}', [PerjalananController::class, 'generate'])->name('generate');
     Route::get('/perjalanan/get', [PerjalananController::class, 'get'])->name('perjalanan.get');
-    Route::get('qrcode/{id}', [PerjalananController::class, 'generate'])->name('generate');
     Route::resource('/perjalanan', PerjalananController::class);
 });
 
-// Route::middleware(['auth:user'])->group(function () {
+// Route::group(['middleware' => 'auth:users'], function () {
 //     Route::get('home', [HomeController::class, 'index'])->name('home');
-//     Route::get('/perjalanan/get', [PerjalananController::class, 'get'])->name('perjalanan.get');
-//     Route::resource('/perjalanan', PerjalananController::class);
 // });

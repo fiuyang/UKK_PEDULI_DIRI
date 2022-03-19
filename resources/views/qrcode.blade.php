@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','Home')
+@section('title','Isi Perjalanan Anda')
 @section('content')
 <style>
     body {
@@ -7,8 +7,9 @@
     }
 </style>
 <div class="container">
-    <div class="row mt-5 text-center">
-        {!! $qrcode !!}
+    <div class="row mt-5 justify-content-center">
+        {!! $qrcode !!} 
+        {{-- <img src="{!! url('storage/app/img/qr-code', $qrcode) !!}" alt=""> --}}
     </div>
 </div>
 @endsection
