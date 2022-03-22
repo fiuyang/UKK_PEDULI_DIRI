@@ -13,7 +13,7 @@
                             <p class="lead">Anda Telah Berhasil Masuk Ke Aplikasi Peduli Diri</p>
                         </div>
                     </div>
-                    @if(Auth::user()->level == 'admin')
+                    @if(Auth::user()->role == 'admin')
                     <div class="text-right mt-3"> 
                         <a href="{{ route('perjalanan.create') }}" class="btn btn-primary">Isi Catatan Perjalanan</a>
                     </div>

@@ -48,7 +48,7 @@
             <nav class="navbar navbar-secondary navbar-expand-lg">
                 <div class="container">
                     <ul class="navbar-nav">
-                        @if (Auth::user()->level == 'admin')
+                        @if (Auth::user()->role == "admin")
                         <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
                             <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-dashboard"></i><span>Dashboard</span></a>
                         </li>
@@ -58,13 +58,19 @@
                         <li class="nav-item {{ Request::is('perjalanan/create') ? 'active' : '' }}">
                             <a href="{{ route('perjalanan.create') }}" class="nav-link"><i class="fas fa-book-open"></i><span>Isi Data</span></a>
                         </li>
+                        <li class="nav-item {{ Request::is('scanner') ? 'active' : '' }}">
+                            <a href="{{ route('scanner') }}" class="nav-link"><i class="fas fa-qrcode"></i><span>Scanner QRcode</span></a>
+                        </li>
                         @endif
-                        @if (Auth::user()->level == 'user')
+                        @if (Auth::user()->role == 'user')
                         <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
                             <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-home"></i><span>Home</span></a>
                         </li>
                         <li class="nav-item {{ Request::is('perjalanan') ? 'active' : '' }}">
                             <a href="{{ route('perjalanan.index') }}" class="nav-link"><i class="fas fa-paper-plane"></i><span>Catatan Perjalanan</span></a>
+                        </li>
+                        <li class="nav-item {{ Request::is('scanner') ? 'active' : '' }}">
+                            <a href="{{ route('scanner') }}" class="nav-link"><i class="fas fa-qrcode"></i><span>Scanner QRcode</span></a>
                         </li>
                         @endif
                     </ul>
@@ -111,7 +117,7 @@
     <script src="{{asset('assets/js/scripts.js')}}"></script>
     <script src="{{asset('assets/js/custom.js')}}"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
-
+    <script src="{{ asset('assets/node_modules/instascan.min.js') }}"></script>
     @yield('script')
     <script>
         function logout() {

@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function index()
     {
-        if(Auth::guard('admin')->check()) {
+        if(Auth::check()) {
             return redirect()->back();
         }
         return view('auth.login');
@@ -32,13 +32,11 @@ class AuthController extends Controller
         $fieldType = filter_var($request->no_telepon, FILTER_VALIDATE_EMAIL) ? 'email' : 'no_telepon';
 
 
-        if (Auth::guard('admin')->check()) {
+        if (Auth::check()) {
             return redirect()->back();
         }
-        else if (Auth::guard('admin')->attempt(array($fieldType => $data['no_telepon'], 'password' => $data['password']))){
-            return redirect()->intended('dashboard');
-        } else if (Auth::attempt(array($fieldType => $data['no_telepon'], 'password' => $data['password']))){
-            return redirect()->intended('home');
+        if (Auth::attempt(array($fieldType => $data['no_telepon'], 'password' => $data['password']))){
+            return redirect()->route('dashboard');
         } else {
             return redirect()->route('login')->with('error', 'email atau password salah!!');
         }
@@ -46,12 +44,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        if (Auth::guard('admin')->check()) {
-            Auth::guard('admin')->logout();
-        } elseif (Auth::guard('users')->check()) {
-            Auth::guard('users')->logout();
-        }
-        // Auth::logout();
+        Auth::logout();
         return redirect()->route('login');
     }
 
@@ -91,7 +84,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'no_telepon' => $request->no_telepon,
             'password' => bcrypt($request->password),
-            'level' => 'user',
+            'role' => 'user',
         ]);
         if($user) {
             return redirect()->route('login')->with('success', 'Kamu Berhasil Membuat Akun');
