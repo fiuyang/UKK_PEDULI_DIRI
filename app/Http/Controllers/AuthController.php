@@ -22,6 +22,9 @@ class AuthController extends Controller
         $request->validate([
             'no_telepon' => 'required',
             'password' => 'required',
+        ],[
+            'no_telepon.required' => 'No Telepon tidak boleh kosong',
+            'password.required' => 'Password tidak boleh kosong',
         ]);
 
         $data = [
@@ -38,7 +41,7 @@ class AuthController extends Controller
         if (Auth::attempt(array($fieldType => $data['no_telepon'], 'password' => $data['password']))){
             return redirect()->route('dashboard');
         } else {
-            return redirect()->route('login')->with('error', 'email atau password salah!!');
+            return redirect(('login'))->with('error', 'no telepon atau email atau password salah!!');
         }
     }
 
@@ -61,6 +64,7 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
             'no_telepon' => ['required', 'regex:/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/', 'unique:users'],
+            'avatar' => 'required|mimes:jpeg,jpg,png' 
         ],[
             'email.required' => 'Email tidak boleh kosong',
             'email.email' => 'Email harus berupa email',
@@ -76,7 +80,15 @@ class AuthController extends Controller
             'password.min' => 'Password minimal 8 karakter',
             'no_telepon.required' => 'No Telepon tidak kosong',
             'no_telepon.regex' => 'No Telepon tidak valid',
+            'avatar.required' => 'Avatar tidak boleh kosong',
+            'avatar.mimes' => 'Avatar harus berupa jpeg, jpg, atau png'
         ]);
+
+        if ($request->hasFile("avatar")) {
+            $file = $request->file("avatar");
+            $filename = time() . "." . $file->getClientOriginalExtension();
+            $file->move('assets/images', $filename);
+        }
 
         $user = User::create([
             'username' => $request->username ,
@@ -84,10 +96,11 @@ class AuthController extends Controller
             'email' => $request->email,
             'no_telepon' => $request->no_telepon,
             'password' => bcrypt($request->password),
+            'avatar' => $filename,
             'role' => 'user',
         ]);
         if($user) {
-            return redirect()->route('login')->with('success', 'Kamu Berhasil Membuat Akun');
+            return redirect(route('login'))->with('success', 'Kamu Berhasil Membuat Akun');
             // session()->flash('success', 'Kamu Berhasil Membuat Akun');
         } else {
             session()->flash('errors','Register gagal! Silahkan ulangi beberapa saat lagi');

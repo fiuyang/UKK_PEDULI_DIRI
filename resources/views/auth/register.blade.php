@@ -68,11 +68,18 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="form-group col-12">
+                                        <div class="form-group col-6">
                                             <label for="no_telepon">No Telepon</label>
                                             <input id="no_telepon" type="text" class="form-control" name="no_telepon" tabindex="1" autofocus value="{{ old('no_telepon') }}">
                                             <div class="invalid-feedback">
                                                 Tolong Isi No Telepon anda
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="avatar">Masukkan Avatar</label>
+                                            <input name="avatar" type="file" class="form-control-file" id="avatar">
+                                            <div class="invalid-feedback">
+                                                Tolong Isi Avatar anda
                                             </div>
                                         </div>
                                     </div>

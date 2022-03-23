@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <title>Peduli Diri - @yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-        {{-- <img src="{{ asset('assets/img/peduli_diri.svg') }}" alt="logo" width="50" class="img-responsive"> --}}
+    <link rel="icon" href="{{  asset('assets/img/peduli_diri.svg')  }}" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
     <link rel="stylesheet" href="{{ asset('assets/node_modules/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/node_modules/fontawesome/css/all.min.css')}} ">
@@ -33,10 +33,17 @@
                 <ul class="navbar-nav navbar-right">
 
                     <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                            <img alt="image" src="{{ asset('assets/img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
-                            <div class="d-sm-none d-lg-inline-block">Hi, {{ Auth::user()->username }}</div>
+                            @if(Auth::user()->avatar)
+                            <img alt="image" src="{{ asset('assets/img/avatar/avatar-1.png') }}" class="rounded-circle">
+                            @else
+                            <img alt="image" src="{{ asset('assets/images/' . Auth::user()->avatar) }}" class="rounded-circle mr-1">
+                            @endif
+                            <div class="d-sm-none d-lg-inline-block">Hi, {{ ucwords(Auth::user()->username) }}</div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
+                            <a href="{{ route('profile', Auth::user()->id) }}" class="dropdown-item has-icon">
+                                <i class="far fa-user"></i> Profile
+                            </a>
                             <a href="javascript:void(0)" onclick="logout()" role="button" class="dropdown-item has-icon text-danger">
                                 <i class="fas fa-sign-out-alt"></i> Logout
                             </a>
@@ -50,7 +57,7 @@
                     <ul class="navbar-nav">
                         @if (Auth::user()->role == "admin")
                         <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
-                            <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-dashboard"></i><span>Dashboard</span></a>
+                            <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-home"></i><span>Dashboard</span></a>
                         </li>
                         <li class="nav-item {{ Request::is('perjalanan') ? 'active' : '' }}">
                             <a href="{{ route('perjalanan.index') }}" class="nav-link"><i class="fas fa-paper-plane"></i><span>Catatan Perjalanan</span></a>
@@ -58,16 +65,13 @@
                         <li class="nav-item {{ Request::is('perjalanan/create') ? 'active' : '' }}">
                             <a href="{{ route('perjalanan.create') }}" class="nav-link"><i class="fas fa-book-open"></i><span>Isi Data</span></a>
                         </li>
-                        <li class="nav-item {{ Request::is('scanner') ? 'active' : '' }}">
-                            <a href="{{ route('scanner') }}" class="nav-link"><i class="fas fa-qrcode"></i><span>Scanner QRcode</span></a>
-                        </li>
                         @endif
                         @if (Auth::user()->role == 'user')
                         <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
                             <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-home"></i><span>Home</span></a>
                         </li>
-                        <li class="nav-item {{ Request::is('perjalanan') ? 'active' : '' }}">
-                            <a href="{{ route('perjalanan.index') }}" class="nav-link"><i class="fas fa-paper-plane"></i><span>Catatan Perjalanan</span></a>
+                        <li class="nav-item {{ Request::is('data-perjalanan') ? 'active' : '' }}">
+                            <a href="{{ route('data-perjalanan') }}" class="nav-link"><i class="fas fa-paper-plane"></i><span>Data Catatan Perjalanan</span></a>
                         </li>
                         <li class="nav-item {{ Request::is('scanner') ? 'active' : '' }}">
                             <a href="{{ route('scanner') }}" class="nav-link"><i class="fas fa-qrcode"></i><span>Scanner QRcode</span></a>
@@ -112,7 +116,7 @@
     <script src="{{asset('assets/node_modules/datatables/media/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('assets/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{asset('assets/node_modules/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
-
+    <script src="{{asset('assets/js/jquery.uploadPreview.min.js')}}"></script>
     <!-- Template JS File -->
     <script src="{{asset('assets/js/scripts.js')}}"></script>
     <script src="{{asset('assets/js/custom.js')}}"></script>

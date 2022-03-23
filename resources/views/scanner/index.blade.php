@@ -25,7 +25,7 @@
     </div>
     <form name="scanner_form" method="post" id="scanner_form">
         @csrf
-        <input type="text" id="scanner" name="scanner" class="form-control" style="height:150px" readonly="true">
+        <input type="text" id="scanner" name="scanner" class="form-control" readonly="true">
     </form>
 </div>
 
@@ -59,9 +59,16 @@
                         showConfirmButton: false,
                         timer: 1500
                     });
-                    return window.location.href = "{{ route('perjalanan.index') }}";
+                    return window.location.href = "{{ route('data-perjalanan') }}";
                 } else {
-                    swal.fire("Error!", 'Masih ada yang salah.', "error");
+                    Swal.fire({
+                        text: ""+response.message+"",
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    // swal.fire("Error!", 'Masih ada yang salah.', "error");
                 }
             // $('#response_message').show();
                 // $('#response_message').html(response.message);

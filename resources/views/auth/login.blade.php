@@ -50,10 +50,13 @@
                                 </div>
                                 <span id="message"></span>
                             </div>
-
+                        
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input id="password" type="password" class="form-control" name="password" placeholder="Password" tabindex="2" required autofocus>
+                                <div class="input-group-prepend">
+                                    <input id="password" type="password" class="form-control" name="password" placeholder="Password" tabindex="2" required autofocus>
+                                    <button type="button" onclick="seePassword(this)" class="input-group-text" id="seePass"><i class="fas fa-eye"></i></button>
+                                </div>
                                 <div class="invalid-feedback">
                                     Tolong Isi Password anda
                                 </div>
@@ -105,6 +108,33 @@
     <script src="{{asset('assets/js/custom.js')}}"></script>
 
     <script>
+        function regSpace(str) {
+            str = str.replace(/\s+/g, '-');
+            return $('input[name="no_telepon"]').val(str)
+        }
+
+        // toggle password
+        function seePassword(icon) {
+            try {
+                var icon = $(`#${icon.id} i`);
+                var inputPass = $('input[id="password"]')
+                var type = 'password'
+                if (icon.attr('class') === 'fas fa-eye') {
+                    type = 'text'
+                    icon.removeClass().addClass('fas fa-eye-slash')
+                } else {
+                    icon.removeClass().addClass('fas fa-eye')
+                }
+                inputPass.map((i, input) => {
+                    $(`input[name="${input.name}"]`).attr('type', type)
+                })
+                return true;
+            } catch (error) {
+                console.log(error)
+                return false;
+            }
+        }
+
         setTimeout(function() {
             $('.alert').slideUp();
         }, 5000);

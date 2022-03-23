@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Perjalanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,18 +19,27 @@ class ScanController extends Controller
             $data = explode(",", $scanner);
             $scan =
             DB::insert(
-                "INSERT INTO perjalanans (tanggal, jam, lokasi, suhu_tubuh) VALUES (:tanggal, :jam, :lokasi, :suhu_tubuh)",
+                "INSERT INTO data_perjalanan (tanggal, jam, lokasi, suhu_tubuh, created_at, updated_at) VALUES (:tanggal, :jam, :lokasi, :suhu_tubuh, :created_at, :updated_at)",
                 [
-                    ':tanggal' => $data[0],
-                    ':jam' => $data[1],
-                    ':lokasi' => $data[2],
-                    ':suhu_tubuh' => $data[3]
+                    'tanggal' => $data[0],
+                    'jam' => $data[1],
+                    'lokasi' => $data[2],
+                    'suhu_tubuh' => $data[3],
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ]
             );
         }
         if ($scan) {
-            $arr = array('message' => 'Data Scan Berhasil DiTambahkan', 'status' => true);
+            return response()->json([
+                'status' => true,
+                'message' => 'Data Scan Berhasil DiTambahkan', 
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data Scan Gagal DiTambahkan', 
+            ]);
         }
-        return response()->json($arr);
     }
 }
