@@ -14,31 +14,30 @@ class ScanController extends Controller
 
     public function store(Request $request)
     {
-        $scanner = request()->post('scanner');
-        if(isset($scanner)) {
-            $data = explode(",", $scanner);
-            $scan =
-            DB::insert(
-                "INSERT INTO data_perjalanan (tanggal, jam, lokasi, suhu_tubuh, created_at, updated_at) VALUES (:tanggal, :jam, :lokasi, :suhu_tubuh, :created_at, :updated_at)",
+        $post = request()->post();
+        if (isset($post)) {
+            $model = DB::insert(
+                "INSERT INTO perjalanans (users_id, tanggal, jam, lokasi, suhu_tubuh, created_at, updated_at) VALUES (:users_id, :tanggal, :jam, :lokasi, :suhu_tubuh, :created_at, :updated_at)",
                 [
-                    'tanggal' => $data[0],
-                    'jam' => $data[1],
-                    'lokasi' => $data[2],
-                    'suhu_tubuh' => $data[3],
+                    'users_id' => auth()->user()->id,
+                    'tanggal' => date('Y-m-d'),
+                    'jam' => date('H:i:s'),
+                    'lokasi' => $post['lokasi'],
+                    'suhu_tubuh' => $post['suhu_tubuh'],
                     'created_at' => now(),
                     'updated_at' => now()
                 ]
             );
         }
-        if ($scan) {
+        if ($model) {
             return response()->json([
                 'status' => true,
-                'message' => 'Data Scan Berhasil DiTambahkan', 
+                'message' => 'Data Scan Berhasil DiTambahkan'
             ]);
         } else {
             return response()->json([
                 'status' => false,
-                'message' => 'Data Scan Gagal DiTambahkan', 
+                'message' => 'Data Scan Gagal DiTambahkan'
             ]);
         }
     }

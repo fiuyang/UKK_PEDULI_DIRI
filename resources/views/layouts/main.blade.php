@@ -7,8 +7,9 @@
     <title>Peduli Diri - @yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{  asset('assets/img/peduli_diri.svg')  }}" />
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    {{-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css"> --}}
     <link rel="stylesheet" href="{{ asset('assets/node_modules/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/node_modules/timepicker/jquery.timepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/node_modules/fontawesome/css/all.min.css')}} ">
     <link rel="stylesheet" href="{{ asset('assets/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}} ">
     <link rel="stylesheet" href="{{ asset('assets/node_modules/bootstrap-daterangepicker/daterangepicker.css')}} ">
@@ -44,6 +45,7 @@
                             <a href="{{ route('profile', Auth::user()->id) }}" class="dropdown-item has-icon">
                                 <i class="far fa-user"></i> Profile
                             </a>
+                            
                             <a href="javascript:void(0)" onclick="logout()" role="button" class="dropdown-item has-icon text-danger">
                                 <i class="fas fa-sign-out-alt"></i> Logout
                             </a>
@@ -56,25 +58,34 @@
                 <div class="container">
                     <ul class="navbar-nav">
                         @if (Auth::user()->role == "admin")
-                        <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
+                        <li class="nav-item {{ Request::is('admin/dashboard') ? 'active' : '' }}">
                             <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-home"></i><span>Dashboard</span></a>
                         </li>
-                        <li class="nav-item {{ Request::is('perjalanan') ? 'active' : '' }}">
-                            <a href="{{ route('perjalanan.index') }}" class="nav-link"><i class="fas fa-paper-plane"></i><span>Catatan Perjalanan</span></a>
+                        <li class="nav-item {{ Request::is('admin/destinasi') ? 'active' : '' }}">
+                            <a href="{{ route('destinasi.index') }}" class="nav-link"><i class="fas fa-clipboard"></i><span>Destinasi</span></a>
                         </li>
-                        <li class="nav-item {{ Request::is('perjalanan/create') ? 'active' : '' }}">
-                            <a href="{{ route('perjalanan.create') }}" class="nav-link"><i class="fas fa-book-open"></i><span>Isi Data</span></a>
+                        <li class="nav-item {{ Request::is('admin/destinasi/create') ? 'active' : '' }}">
+                            <a href="{{ route('destinasi.create') }}" class="nav-link"><i class="fas fa-book-open"></i><span>Isi Data</span></a>
+                        </li>
+                        <li class="nav-item {{ Request::is('admin/pengguna') ? 'active' : '' }}">
+                            <a href="{{ route('pengguna.index') }}" class="nav-link"><i class="fas fa-users"></i><span>Users</span></a>
                         </li>
                         @endif
                         @if (Auth::user()->role == 'user')
-                        <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
-                            <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-home"></i><span>Home</span></a>
+                        <li class="nav-item {{ Request::is('user/dashboard-user') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard-user') }}" class="nav-link "><i class="fas fa-home"></i><span>Home</span></a>
                         </li>
-                        <li class="nav-item {{ Request::is('data-perjalanan') ? 'active' : '' }}">
-                            <a href="{{ route('data-perjalanan') }}" class="nav-link"><i class="fas fa-paper-plane"></i><span>Data Catatan Perjalanan</span></a>
+                        <li class="nav-item {{ Request::is('user/perjalanan') ? 'active' : '' }}">
+                            <a href="{{ route('perjalanan.index') }}" class="nav-link"><i class="fas fa-user"></i><span>Data Perjalanan</span></a>
                         </li>
-                        <li class="nav-item {{ Request::is('scanner') ? 'active' : '' }}">
+                        <li class="nav-item {{ Request::is('user/scanner') ? 'active' : '' }}">
                             <a href="{{ route('scanner') }}" class="nav-link"><i class="fas fa-qrcode"></i><span>Scanner QRcode</span></a>
+                        </li>
+                        <li class="nav-item {{ Request::is('user/perjalanan/create') ? 'active' : '' }}">
+                            <a href="{{ route('perjalanan.create') }}" class="nav-link"><i class="fas fa-book-open"></i><span>Manual</span></a>
+                        </li>
+                        <li class="nav-item {{ Request::is('user/log') ? 'active' : '' }}">
+                            <a href="{{ route('log.index') }}" class="nav-link"><i class="fas fa-history"></i><span>Log</span></a>
                         </li>
                         @endif
                     </ul>
@@ -120,8 +131,9 @@
     <!-- Template JS File -->
     <script src="{{asset('assets/js/scripts.js')}}"></script>
     <script src="{{asset('assets/js/custom.js')}}"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    {{-- <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script> --}}
     <script src="{{ asset('assets/node_modules/instascan.min.js') }}"></script>
+    <script src="{{ asset('assets/node_modules/timepicker/jquery.timepicker.js') }}"></script>
     @yield('script')
     <script>
         function logout() {
@@ -133,6 +145,8 @@
             html : '<a href="{{ route('logout') }}" class="btn btn-info btn-lg">Keluar</a> <button href="javascript:void(0)" onclick="swal.close()" class="btn btn-danger btn-lg">Batal</button>'            
             });
         }
+        
+       
     </script>
 </body>
 </html>

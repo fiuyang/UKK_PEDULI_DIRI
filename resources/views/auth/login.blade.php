@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <title>Login - Peduli Diri</title>
 
+    <link rel="icon" href="{{  asset('assets/img/peduli_diri.svg')  }}" />
     <link rel="stylesheet" href="{{ asset('assets/third-party/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/node_modules/fontawesome/css/all.min.css')}} ">
 

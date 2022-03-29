@@ -1,16 +1,14 @@
 @extends('layouts.main')
-@section('title','Catatan Perjalanan')
+@section('title','Destinasi')
 @section('content')
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-header">
-                <div class="form-group">
-                    @if(Auth::user()->role == 'admin')
-                    <a href="{{ route('perjalanan.create') }}" class="btn btn-primary btn-sm">
-                        Create 
+            <div class="card-header row">
+                <div class="form-group col-md-12 text-right mb-0">
+                    <a href="{{ route('destinasi.create') }}" class="btn btn-primary btn-md">
+                        Create
                     </a>
-                    @endif
                 </div>
             </div>
             <div class="card-body">
@@ -30,10 +28,8 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Tanggal</th>
-                                <th>Waktu</th>
-                                <th>Lokasi </th>
-                                <th>Suhu Tubuh</th>
+                                <th>Destinasi</th>
+                                <th>Lokasi</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -61,16 +57,12 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            // pageLength: 5,
-            // scrollX: true,
             "order": [[ 0, "desc" ]],
-            ajax: '{{ route('perjalanan.get') }}',
+            ajax: '{{ route('destinasi.get') }}',
             columns: [
                 {data: 'id', name: 'id'},
-                {data: 'tanggal', name: 'tanggal'},
-                {data: 'jam', name: 'jam'},
-                {data: 'lokasi', name: 'lokasi'},
-                {data: 'suhu_tubuh', name: 'suhu_tubuh'},
+                {data: 'nama_destinasi', name: 'nama_destinasi'},
+                {data: 'lokasi_destinasi', name: 'lokasi_destinasi'},
                 {data: 'actions', name: 'actions',orderable:false,serachable:false,sClass:'text-center'},
             ]
         });
@@ -90,7 +82,7 @@
                 var token = $("meta[name='csrf-token']").attr("content");
                 $.ajax({
                     type: 'DELETE',
-                    url: "perjalanan/"+id,
+                    url: "destinasi/"+id,
                     data: {
                         _token: token
                     },

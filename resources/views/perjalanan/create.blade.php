@@ -35,7 +35,7 @@
                                     <i class="fas fa-calendar"></i>
                                 </div>
                             </div>
-                            <input type="text" class="form-control datepicker" name="tanggal" id="tanggal" value="{{ old('tanggal') }}">
+                            <input type="text" class="form-control" name="tanggal" id="tanggal" value="{{ date('Y-m-d') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group">
@@ -46,7 +46,7 @@
                                     <i class="fas fa-clock"></i>
                                 </div>
                             </div>
-                            <input type="text" class="form-control time" name="jam" id="jam" value="{{ old('jam') }}">
+                            <input type="time" class="form-control" name="jam" id="jam" value="{{ date('H:i:s') }}" readonly>
                         </div>
                     </div>
                     <div class="form-group">
@@ -71,15 +71,6 @@
 @section('script')
 <script>
 
-    $(document).ready(function() {
-        $('.time').timepicker({
-            timeFormat: 'hh:mm:ss p',
-            dropdown: true,
-            scrollbar: true
-        });
-    });
-
-
     $(document).ready(function () {
         $('.datepicker').daterangepicker({
             singleDatePicker: true,
@@ -90,9 +81,5 @@
         });
     });
 
-    // setTimeout(function() {
-    //     $('.alert').slideUp();
-    // }, 5000);
-    
 </script>    
 @endsection

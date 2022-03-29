@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDataPerjalananTable extends Migration
+class CreateDestinasiTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateDataPerjalananTable extends Migration
      */
     public function up()
     {
-        Schema::create('data_perjalanan', function (Blueprint $table) {
+        Schema::create('destinasi', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal');
-            $table->time('jam');
-            $table->text('lokasi');
-            $table->float('suhu_tubuh');
+            $table->unsignedBigInteger('users_id');
+            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('nama_destinasi');
+            $table->string('lokasi_destinasi');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateDataPerjalananTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('data_perjalanan');
+        Schema::dropIfExists('destinasi');
     }
 }

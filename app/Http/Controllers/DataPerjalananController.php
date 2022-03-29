@@ -16,7 +16,9 @@ class DataPerjalananController extends Controller
     
     public function get()
     {
-        $data = DataPerjalanan::orderBy('id', 'ASC');
+        $data = DataPerjalanan::orderBy('id', 'ASC')->where([
+            'users_id' => auth()->user()->id
+        ]);
         return DataTables::of($data)
             ->addColumn('tanggal', function ($request) {
                 $date = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('d-m-Y');
@@ -26,7 +28,24 @@ class DataPerjalananController extends Controller
                 $time = Carbon::createFromFormat('H:i:s', $request->jam)->format('H:i');
                 return $time;
             })
+
+            ->addColumn('actions', function ($data) {
+                $actions = "";
+                $actions = '<button class="btn btn-danger" onclick="destroy(' . $data->id . ')" type="button">Delete</button>';
+                return $actions;
+            })
+            ->rawColumns(['actions'])
             ->addIndexColumn()
-            ->make(true);
+            ->make(true);         
+    }
+
+    public function destroy($id)
+    {
+        $data_perjalanan = DataPerjalanan::find($id);
+        $data_perjalanan->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Berhasil Di Hapus',
+        ]);
     }
 }

@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <title>Peduli Diri - Register</title>
 
+    <link rel="icon" href="{{  asset('assets/img/peduli_diri.svg')  }}" />
     <link rel="stylesheet" href="{{ asset('assets/third-party/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/node_modules/fontawesome/css/all.min.css')}} ">
 
@@ -49,7 +50,7 @@
                                     </ul>
                                 </div>
                                 @endif
-                                <form method="POST" action="{{ route('register') }}" class="needs-validation" novalidate="">
+                                <form method="POST" action="{{ route('register') }}" class="needs-validation" novalidate="" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
                                         <div class="form-group col-6">

@@ -1,10 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ScanController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DestinasiController;
 use App\Http\Controllers\PerjalananController;
 use App\Http\Controllers\DataPerjalananController;
 
@@ -30,31 +33,39 @@ Route::get('logout',   [AuthController::class, 'logout'])->name('logout');
 Route::post('login',   [AuthController::class, 'login'])->name('login');
 
 Route::middleware(['auth', 'cekLevel:admin,user'])->group(function () {
-    
-    Route::group(['prefix' => 'admin'], function () {
-        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'); 
-        Route::get('qrcode/{id}', [PerjalananController::class, 'qrcode'])->name('qrcode');
-        Route::get('generate/{id}', [PerjalananController::class, 'generate'])->name('generate');
-        Route::get('/perjalanan/get', [PerjalananController::class, 'get'])->name('perjalanan.get');
-        Route::resource('/perjalanan', PerjalananController::class);
 
-        Route::get('profile/{id}', [UserController::class, 'index'])->name('profile');
-        Route::put('profile/{id}', [UserController::class, 'profile'])->name('profile.update');
-        //change password
-        Route::get('profile/password/{id}', [UserController::class, 'password'])->name('password');
-        Route::put('profile/password/{id}', [UserController::class, 'changePassword'])->name('password.change');
+    Route::group(['prefix' => 'admin'], function () {
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('/pengguna/get', [PenggunaController::class, 'get'])->name('pengguna.get');
+        Route::resource('/pengguna', PenggunaController::class);
+
+        //destinasi
+        Route::get('/destinasi/get', [DestinasiController::class, 'get'])->name('destinasi.get');
+        Route::resource('/destinasi', DestinasiController::class);
+        //qrcode
+        Route::get('qrcode/{id}', [DestinasiController::class, 'qrcode'])->name('qrcode');
+
+        Route::get('setting/{id}', [UserController::class, 'index'])->name('profile');
+        Route::put('setting/{id}', [UserController::class, 'profile'])->name('profile.update');
+        // change password
+        Route::get('setting/password/{id}', [UserController::class, 'password'])->name('password');
+        Route::put('setting/password/{id}', [UserController::class, 'changePassword'])->name('password.change');
     });
 });
+
 
 Route::middleware(['auth', 'cekLevel:user'])->group(function () {
 
     Route::group(['prefix' => 'user'], function () {
-        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'); 
-        Route::get('data-perjalanan/get', [DataPerjalananController::class, 'get'])->name('data-perjalanan.get');
-        Route::get('data-perjalanan', [DataPerjalananController::class, 'index'])->name('data-perjalanan');
+        Route::get('dashboard-user', [DashboardController::class, 'index'])->name('dashboard-user');
+        Route::get('perjalanan/get', [PerjalananController::class, 'get'])->name('perjalanan.get');
+        Route::resource('perjalanan', PerjalananController::class);
+        Route::resource('log', LogController::class);
+        //scanner
         Route::get('scanner', [ScanController::class, 'index'])->name('scanner');
         Route::post('scanner/store', [ScanController::class, 'store'])->name('scanner.store');
-
+        //profile
         Route::get('profile/{id}', [UserController::class, 'index'])->name('profile');
         Route::put('profile/{id}', [UserController::class, 'profile'])->name('profile.update');
         //change password
@@ -62,3 +73,6 @@ Route::middleware(['auth', 'cekLevel:user'])->group(function () {
         Route::put('profile/password/{id}', [UserController::class, 'changePassword'])->name('password.change');
     });
 });
+
+
+

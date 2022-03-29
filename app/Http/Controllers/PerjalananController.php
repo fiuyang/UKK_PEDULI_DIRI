@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Perjalanan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -24,10 +25,12 @@ class PerjalananController extends Controller
 
     public function get()
     {
-        $data = Perjalanan::orderBy('id', 'ASC');
+        $data = Perjalanan::orderBy('id', 'ASC')->where([
+            'users_id' => auth()->user()->id
+        ]);
         return DataTables::of($data)
             ->addColumn('tanggal', function ($request) {
-                $date = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('d-m-Y');
+                $date = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('d-M-Y');
                 return $date; 
             })
             ->addColumn('jam', function ($request) {
@@ -36,17 +39,11 @@ class PerjalananController extends Controller
             })
             ->addColumn('actions', function ($data) {
                 $actions = "";
-                if (Auth::user()->role == 'admin') {
+                if (Auth::user()->role == 'user') {
                     $actions = '<a href="' . route('perjalanan.edit', $data->id) . '" class="btn btn-info">Edit</a>
-                                <button class="btn btn-danger" onclick="destroy(' . $data->id . ')" type="button">Delete</button>
-                                <a href="' . route('generate', $data->id) . '" class="btn btn-primary">Generate</a>
-                                <a href="' . route('qrcode',  $data->id) . '" class="btn btn-info">QrCode</a>';
-                } 
-                // if(Auth::user()->role == 'user') {
-                //     $actions = '<a href="' . route('qrcode',  $data->id) . '" class="btn btn-info">QrCode</a>';
-                // }    
+                                <button class="btn btn-danger" onclick="destroy(' . $data->id . ')" type="button">Delete</button>';
+                }
                 return $actions;
-                
             })
             ->rawColumns(['actions'])
             ->addIndexColumn()
@@ -75,6 +72,7 @@ class PerjalananController extends Controller
         ]);
 
         $data = [
+            'users_id' => auth()->user()->id,
             'tanggal' => $request->tanggal,
             'jam' => preg_replace("/[^0-9]/", "", $request->jam),
             'lokasi' => $request->lokasi,
@@ -82,6 +80,7 @@ class PerjalananController extends Controller
         ];
 
         $perjalanan = Perjalanan::create($data);
+
         if ($perjalanan) {
             return redirect()->route('perjalanan.index')->with('success', 'Data Berhasil Di Tambahkan');
         } else {
@@ -92,25 +91,6 @@ class PerjalananController extends Controller
     public function create()
     {
         return view('perjalanan.create');
-    }
-
-    public function generate($id)
-    {
-        $data = Perjalanan::findOrFail($id);
-        $qrcode = QrCode::size(400)->errorCorrection('H')
-                ->generate($data['tanggal'] . ',' . $data['jam'] . ',' . $data['lokasi'] . ',' . $data['suhu_tubuh']);
-        $output_file = '/img/qr-code/img-' . time() . '.png';
-        Storage::disk('local')->put($output_file, $qrcode); 
-        return view('qrcode', compact('data','qrcode'));
-    }
-
-    public function qrcode($id)
-    {
-        $data = Perjalanan::findOrFail($id);
-        $pecah = explode(",", $data);
-        $qrcode = QrCode::size(400)->errorCorrection('H')
-            ->generate($data['tanggal'] . ',' . $data['jam'] . ',' . $data['lokasi'] . ',' . $data['suhu_tubuh']);
-        return view('qrcode', compact('data', 'qrcode'));
     }
 
     /**
@@ -132,7 +112,10 @@ class PerjalananController extends Controller
      */
     public function edit($id)
     {
-        $perjalanan = Perjalanan::findOrFail($id);
+        $perjalanan = DB::select(
+            'CALL get_by_id('.$id.')'
+        );
+        $perjalanan = collect($perjalanan)->first();
         return view('perjalanan.edit', compact('perjalanan'));
     }
 
@@ -158,6 +141,7 @@ class PerjalananController extends Controller
         ]);
 
         $data = [
+            'users_id' => Auth::user()->id,
             'tanggal' => $request->tanggal,
             'jam' => preg_replace("/[^0-9]/", "", $request->jam),
             'lokasi' => $request->lokasi,

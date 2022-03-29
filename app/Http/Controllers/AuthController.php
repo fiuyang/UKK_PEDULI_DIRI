@@ -63,7 +63,7 @@ class AuthController extends Controller
             'nik'      => 'required|unique:users|min:16|numeric',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
-            'no_telepon' => ['required', 'regex:/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/', 'unique:users'],
+            'no_telepon' => ['required', 'regex:/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/', 'unique:users', 'min:11', 'max:13'],
             'avatar' => 'required|mimes:jpeg,jpg,png' 
         ],[
             'email.required' => 'Email tidak boleh kosong',
@@ -80,6 +80,8 @@ class AuthController extends Controller
             'password.min' => 'Password minimal 8 karakter',
             'no_telepon.required' => 'No Telepon tidak kosong',
             'no_telepon.regex' => 'No Telepon tidak valid',
+            'no_telepon.min' => 'No Telepon minimal 11 digit',
+            'no_telepon.max' => 'No Telepon maximal 13 digit',
             'avatar.required' => 'Avatar tidak boleh kosong',
             'avatar.mimes' => 'Avatar harus berupa jpeg, jpg, atau png'
         ]);

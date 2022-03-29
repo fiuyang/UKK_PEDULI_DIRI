@@ -7,7 +7,7 @@
             <div class="card-header">
                 <div class="form-group">
                     @if(Auth::user()->role == 'admin')
-                    <a href="{{ route('perjalanan.create') }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('pengguna.create') }}" class="btn btn-primary btn-sm">
                         Create 
                     </a>
                     @endif
@@ -30,10 +30,9 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Tanggal</th>
-                                <th>Waktu</th>
-                                <th>Lokasi </th>
-                                <th>Suhu Tubuh</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>No Telepon </th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -64,13 +63,12 @@
             // pageLength: 5,
             // scrollX: true,
             "order": [[ 0, "desc" ]],
-            ajax: '{{ route('perjalanan.get') }}',
+            ajax: '{{ route('pengguna.get') }}',
             columns: [
                 {data: 'id', name: 'id'},
-                {data: 'tanggal', name: 'tanggal'},
-                {data: 'jam', name: 'jam'},
-                {data: 'lokasi', name: 'lokasi'},
-                {data: 'suhu_tubuh', name: 'suhu_tubuh'},
+                {data: 'username', name: 'username'},
+                {data: 'email', name: 'email'},
+                {data: 'no_telepon', name: 'no_telepon'},
                 {data: 'actions', name: 'actions',orderable:false,serachable:false,sClass:'text-center'},
             ]
         });
@@ -90,7 +88,7 @@
                 var token = $("meta[name='csrf-token']").attr("content");
                 $.ajax({
                     type: 'DELETE',
-                    url: "perjalanan/"+id,
+                    url: "pengguna/"+id,
                     data: {
                         _token: token
                     },

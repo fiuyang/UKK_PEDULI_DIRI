@@ -10,8 +10,23 @@
     <div class="alert alert-success d-none" id="message">
         <span id="response_message"></span>
     </div>
-    <div class="row mt-5 justify-content-center">
-        <video id="preview"></video>
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="form-group text-center">
+                <h4>Masukkan Suhu Tubuh Anda</h4>
+                <input type="number" name="suhu_tubuh" class="form-control" id="suhuTubuh">
+                <div class="form-group mt-3">
+                    <button type="button" class="btn btn-info mr-2" id="submitSuhu" onclick="submit_suhu()">Konfirmasi</button>
+                    <button type="button" class="btn btn-danger" id="resetSuhu" onclick="reset_suhu()">Reset</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group text-center">
+                <h4>Scan QR</h4>
+                <div id="scannerContainer"></div>
+            </div>
+        </div>
     </div>
     <div class="text-center mt-5">
         <div class="btn-group btn-group-toggle mb-5" data-toggle="buttons">
@@ -34,80 +49,92 @@
 @section('script')
 
 <script type="text/javascript">
+    var suhu_tubuh;
+    var scanner;
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    var scanner = new Instascan.Scanner({ video: document.getElementById('preview'), scanPeriod: 5, mirror: false });
 
-    scanner.addListener('scan', function(content) {
-            document.getElementById('scanner').value = content;
+    function submit_suhu() {
+        suhu_tubuh = $('#suhuTubuh').val();
+        if (suhu_tubuh && suhu_tubuh != '') {
+            $('#suhuTubuh').prop('readonly', true);
+            var html = '<video id="preview" style="width:500px;" style="display:none;"></video>';
+            $('#scannerContainer').html(html);
+            scanner = new Instascan.Scanner({ video: document.getElementById('preview'), scanPeriod: 5, mirror: true });
+            scanner.addListener('scan', function(content) {
+                document.getElementById('scanner').value = content;
 
-        $.ajax({
-            url: "{{ route('scanner.store') }}", 
-            type:"POST",
-            data:{
-                "scanner": content
-            },
-            success: function(response){
-                if(response.message) {
-                    Swal.fire({
-                        text: ""+response.message+"",
-                        icon: 'success',
-                        title: 'Success',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    return window.location.href = "{{ route('data-perjalanan') }}";
-                } else {
-                    Swal.fire({
-                        text: ""+response.message+"",
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    // swal.fire("Error!", 'Masih ada yang salah.', "error");
-                }
-            // $('#response_message').show();
-                // $('#response_message').html(response.message);
-                // $('#message').removeClass('d-none');
-        
-                // document.getElementById("scanner_form").reset();
-                // setTimeout(function(){
-                // $('#response_message').hide();
-                // $('#message').hide();
-                // },4000);
-            },
-        });
-    });
-    Instascan.Camera.getCameras().then(function (cameras){
-        if(cameras.length>0){
-            scanner.start(cameras[0]);
-            $('[name="options"]').on('change',function(){
-                if($(this).val()==1){
-                    if(cameras[0]!=""){
-                        scanner.start(cameras[0]);
-                    }else{
-                        alert('No Front camera found!');
-                    }
-                }else if($(this).val()==2){
-                    if(cameras[1]!=""){
-                        scanner.start(cameras[1]);
-                    }else{
-                        alert('No Back camera found!');
-                    }
-                }
+                $.ajax({
+                    url: "{{ route('scanner.store') }}",
+                    type:"POST",
+                    data:{
+                        "lokasi": content,
+                        "suhu_tubuh": suhu_tubuh
+                    },
+                    success: function(response){
+                        if(response.message) {
+                            Swal.fire({
+                                text: ""+response.message+"",
+                                icon: 'success',
+                                title: 'Success',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            return window.location.href = "{{ route('perjalanan.index') }}";
+                        } else {
+                            Swal.fire({
+                                text: ""+response.message+"",
+                                icon: 'error',
+                                title: 'Error',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                    },
+                });
             });
-        }else{
-            console.error('No cameras found.');
-            alert('No cameras found.');
+            Instascan.Camera.getCameras().then(function (cameras){
+                if(cameras.length>0){
+                    scanner.start(cameras[0]);
+                    $('[name="options"]').on('change',function(){
+                        if($(this).val()==1){
+                            if(cameras[0]!=""){
+                                scanner.start(cameras[0]);
+                            }else{
+                                alert('No Front camera found!');
+                            }
+                        }else if($(this).val()==2){
+                            if(cameras[1]!=""){
+                                scanner.start(cameras[1]);
+                            }else{
+                                alert('No Back camera found!');
+                            }
+                        }
+                    });
+                }else{
+                    console.error('No cameras found.');
+                    alert('No cameras found.');
+                }
+            }).catch(function(e){
+                console.error(e);
+                alert(e);
+            });
+        } else {
+            return false;
         }
-    }).catch(function(e){
-        console.error(e);
-        alert(e);
-    });
+    }
+
+    function reset_suhu() {
+        suhu_tubuh = false;
+        $('#suhuTubuh').val('');
+        $('#suhuTubuh').prop('readonly', false);
+        scanner.stop();
+        $('#scannerContainer').html('');
+    }
 
 </script>
 @endsection
