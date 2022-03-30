@@ -46,11 +46,11 @@ Route::middleware(['auth', 'cekLevel:admin,user'])->group(function () {
         //qrcode
         Route::get('qrcode/{id}', [DestinasiController::class, 'qrcode'])->name('qrcode');
 
-        Route::get('setting/{id}', [UserController::class, 'index'])->name('profile');
-        Route::put('setting/{id}', [UserController::class, 'profile'])->name('profile.update');
+        Route::get('profile/{id}', [UserController::class, 'index'])->name('profile');
+        Route::put('profile/{id}', [UserController::class, 'profile'])->name('profile.update');
         // change password
-        Route::get('setting/password/{id}', [UserController::class, 'password'])->name('password');
-        Route::put('setting/password/{id}', [UserController::class, 'changePassword'])->name('password.change');
+        Route::get('profile/password/{id}', [UserController::class, 'password'])->name('password');
+        Route::put('profile/password/{id}', [UserController::class, 'changePassword'])->name('password.change');
     });
 });
 
@@ -66,11 +66,11 @@ Route::middleware(['auth', 'cekLevel:user'])->group(function () {
         Route::get('scanner', [ScanController::class, 'index'])->name('scanner');
         Route::post('scanner/store', [ScanController::class, 'store'])->name('scanner.store');
         //profile
-        Route::get('profile/{id}', [UserController::class, 'index'])->name('profile');
-        Route::put('profile/{id}', [UserController::class, 'profile'])->name('profile.update');
+        // Route::get('profile/{id}', [UserController::class, 'index'])->name('profile');
+        // Route::put('profile/{id}', [UserController::class, 'profile'])->name('profile.update');
         //change password
-        Route::get('profile/password/{id}', [UserController::class, 'password'])->name('password');
-        Route::put('profile/password/{id}', [UserController::class, 'changePassword'])->name('password.change');
+        // Route::get('profile/password/{id}', [UserController::class, 'password'])->name('password');
+        // Route::put('profile/password/{id}', [UserController::class, 'changePassword'])->name('password.change');
     });
 });
 

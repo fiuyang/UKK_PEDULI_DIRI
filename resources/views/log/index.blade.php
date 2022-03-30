@@ -3,6 +3,11 @@
 @section('content')
 <div class="row">
     <div class="col-lg-12">
+        @if(count($logs) < 1)
+            <div align="center">
+                <img src="{{ asset('assets/img/notfound.png') }}" width="300px">
+            </div>
+        @endif
         <div class="activities">
             @foreach ($logs as $log)
                 @if(auth()->user()->id)

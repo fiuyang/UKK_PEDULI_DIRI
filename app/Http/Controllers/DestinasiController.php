@@ -29,7 +29,7 @@ class DestinasiController extends Controller
             ->addColumn('actions', function ($data) {
                 $actions = "";
                 if (Auth::user()->role == 'admin') {
-                    $actions = '<a href="' . route('destinasi.edit', $data->id) . '" class="btn btn-warning">Edit</a>
+                    $actions = '<a href="' . route('destinasi.edit', $data->id) . '" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                                 <button class="btn btn-danger" onclick="destroy(' . $data->id . ')" type="button"><i class="fa fa-trash"></i></button>
                                 <a href="' . route('qrcode',  $data->id) . '" class="btn btn-info"><i class="fas fa-qrcode"></i></a>';
                 }
