@@ -112,10 +112,11 @@ class PerjalananController extends Controller
      */
     public function edit($id)
     {
-        $perjalanan = DB::select(
-            'CALL get_by_id('.$id.')'
-        );
-        $perjalanan = collect($perjalanan)->first();
+        // $perjalanan = DB::select(
+        //     'CALL get_by_id('.$id.')'
+        // );
+        // $perjalanan = collect($perjalanan)->first();
+        $perjalanan = Perjalanan::findOrFail($id);
         return view('perjalanan.edit', compact('perjalanan'));
     }
 

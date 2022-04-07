@@ -14,12 +14,14 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected $commands = [
-        'App\Console\Commands\DatabaseBackUp'
+        Commands\CronTes::class,
+        Commands\DatabaseBackUp::class,
     ];
 
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('database:backup')->daily();
+        $schedule->command('cron:log')->everyMinute();
     }
 
     /**

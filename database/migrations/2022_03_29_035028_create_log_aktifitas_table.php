@@ -24,33 +24,27 @@ class CreateLogAktifitasTable extends Migration
             $table->timestamps();
         });
 
-        DB::unprepared('
-            CREATE TRIGGER `thapus_perjalanan` 
-            BEFORE DELETE ON `perjalanans` 
-            FOR EACH ROW 
-            INSERT log_aktifitas(users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT("menghapus Catatan Di lokasi: ", old.lokasi),now(),3 )
-        ;');
+        // DB::unprepared('
+        //     CREATE TRIGGER `thapus_perjalanan`
+        //     BEFORE DELETE ON `perjalanans` 
+        //     FOR EACH ROW 
+        //     INSERT log_aktifitas(users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT("menghapus Catatan Di lokasi: ", old.lokasi),now(),3 )
+        // ;');
 
-        DB::unprepared('
-            CREATE TRIGGER `tupdate_perjalanan` 
-            BEFORE UPDATE ON `perjalanans` 
-            FOR EACH ROW 
-            INSERT log_aktifitas(users_id,aksi, waktu, tipe) VALUES (old.users_id ,CONCAT("mengubah Catatan Perjalanan Di lokasi: ", old.lokasi ,"Menjadi :", new.lokasi  ),now(), 2)
-        ;');
+        // DB::unprepared('
+        //     CREATE TRIGGER `tupdate_perjalanan` 
+        //     BEFORE UPDATE ON `perjalanans` 
+        //     FOR EACH ROW 
+        //     INSERT log_aktifitas(users_id,aksi, waktu, tipe) VALUES (old.users_id ,CONCAT("mengubah Catatan Perjalanan Di lokasi: ", old.lokasi ,"Menjadi :", new.lokasi  ),now(), 2)
+        // ;');
 
-        DB::unprepared("
-            CREATE TRIGGER `tcreate_perjalanan` 
-            BEFORE INSERT ON `perjalanans` 
-            FOR EACH ROW 
-            INSERT log_aktifitas(users_id,aksi, waktu,tipe) VALUES (NEW.users_id,  CONCAT('Menambahkan Catatan Perjalanan Di lokasi : ', NEW.lokasi),now(), 1)
-        ;");
+        // DB::unprepared('
+        //     CREATE TRIGGER `tcreate_perjalanan` 
+        //     BEFORE INSERT ON `perjalanans`
+        //     FOR EACH ROW 
+        //     INSERT log_aktifitas(users_id,aksi, waktu,tipe) VALUES (NEW.users_id,  CONCAT("Menambahkan Catatan Perjalanan Di lokasi : ", NEW.lokasi),now(), 1)
+        // ;');
 
-
-        DB::unprepared("DROP PROCEDURE IF EXISTS `getLog`;
-                CREATE PROCEDURE `getLog`
-                BEGIN
-                    SELECT * FROM log_aktifitas ORDER BY waktu DESC;
-                END;");
 
     }
 

@@ -25,12 +25,12 @@ class CreatePerjalanansTable extends Migration
             $table->timestamps();
         });
 
-        $procedure = "DROP PROCEDURE IF EXISTS `get_by_id`;
-                    CREATE PROCEDURE `get_by_id` (IN `id` INT)
-                    BEGIN
-                        SELECT * FROM perjalanans WHERE id = id;
-                    END;";
-        DB::unprepared($procedure);
+        // $procedure = "DROP PROCEDURE IF EXISTS `get_by_id`;
+        //             CREATE PROCEDURE `get_by_id` (IN `id` INT)
+        //             BEGIN
+        //                 SELECT * FROM perjalanans WHERE id = id;
+        //             END;";
+        // DB::unprepared($procedure);
 
 
     }
