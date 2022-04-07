@@ -37,7 +37,7 @@ class CreateLogAktifitasTable extends Migration
             RETURNS trigger AS $$
             BEGIN
       
-               RETURN INSERT INTO log_aktifitas (users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT("menghapus Catatan Di lokasi:", old.lokasi),now(),3);
+               RETURN INSERT log_aktifitas (users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT("menghapus Catatan Di lokasi:", old.lokasi),now(),3);
             END
             $$ LANGUAGE plpgsql;
             
