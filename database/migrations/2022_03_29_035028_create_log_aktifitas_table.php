@@ -37,7 +37,7 @@ class CreateLogAktifitasTable extends Migration
             RETURNS trigger AS $$
             BEGIN
             IF NEW.lokasi <> OLD.lokasi THEN
-                INSERT log_aktifitas(users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT(menghapus Catatan Di lokasi:, old.lokasi),now(),3)
+                INSERT INTO log_aktifitas (users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT(menghapus Catatan Di lokasi:, old.lokasi),now(),3)
             END IF;
             RETURN NEW;
             END
