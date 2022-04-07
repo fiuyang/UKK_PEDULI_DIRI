@@ -22,12 +22,17 @@ class CreateLogUsersTable extends Migration
             $table->timestamps();
         });
 
+        DB::unprepared('CREATE TRIGGER histories_insert 
+                AFTER INSERT ON packets 
+                FOR EACH ROW
+                EXECUTE PROCEDURE that_procudure_you_wrote_with_that_content(new)');
+
         DB::unprepared('
                 CREATE TRIGGER update_email_users 
                     BEFORE UPDATE 
                     ON users
                     FOR EACH ROW 
-                BEGIN
+                EXECUTE PROCEDURE
                     INSERT INTO log_users
                     set nik = OLD.nik,
                     email_lama = OLD.email,
