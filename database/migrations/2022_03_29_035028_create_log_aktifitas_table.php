@@ -46,12 +46,6 @@ class CreateLogAktifitasTable extends Migration
         ;");
 
 
-        DB::unprepared("DROP PROCEDURE IF EXISTS `getLog`;
-                CREATE PROCEDURE `getLog`
-                BEGIN
-                    SELECT * FROM log_aktifitas ORDER BY waktu DESC;
-                END;");
-
     }
 
     /**
