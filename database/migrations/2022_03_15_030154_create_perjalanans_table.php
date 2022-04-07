@@ -25,11 +25,21 @@ class CreatePerjalanansTable extends Migration
             $table->timestamps();
         });
 
-        $procedure = "DROP PROCEDURE IF EXISTS `get_by_id`;
-                    CREATE PROCEDURE `get_by_id` (IN `id` INT)
-                    BEGIN
-                        SELECT * FROM perjalanans WHERE id = id;
-                    END;";
+        // $procedure = "DROP PROCEDURE IF EXISTS `get_by_id`;
+        //             CREATE PROCEDURE `get_by_id` (IN `id` INT)
+        //             BEGIN
+        //                 SELECT * FROM perjalanans WHERE id = id;
+        //             END;";
+        $procedure = "CREATE OR REPLACE FUNCTION public."get_by_id"(IN `id` INT)
+                    RETURNS bigint AS
+                    $BODY$
+                    SELECT count(*)  FROM perjalanans WHERE id=id;
+                    $BODY$
+                    LANGUAGE sql VOLATILE
+                    COST 100;
+                    ALTER FUNCTION public."get_by_id"()
+                    OWNER TO postgres;
+                ";
         DB::unprepared($procedure);
 
 
