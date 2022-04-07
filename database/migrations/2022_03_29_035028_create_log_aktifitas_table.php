@@ -25,8 +25,8 @@ class CreateLogAktifitasTable extends Migration
         });
 
         DB::unprepared('
-            CREATE TRIGGER 'thapus_perjalanan'
-            BEFORE DELETE ON 'perjalanans' 
+            CREATE TRIGGER "thapus_perjalanan"
+            BEFORE DELETE ON "perjalanans" 
             FOR EACH ROW 
             INSERT log_aktifitas(users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT('menghapus Catatan Di lokasi: ', old.lokasi),now(),3 )
         ;');
