@@ -36,8 +36,10 @@ class CreateLogAktifitasTable extends Migration
             CREATE OR REPLACE FUNCTION thapus_perjalanan()
             RETURNS trigger AS $$
             BEGIN
-                INSERT log_aktifitas(users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT(menghapus Catatan Di lokasi:, old.lokasi),now(),3 )
-                RETURN log_aktifitas;
+            IF NEW.lokasi <> OLD.lokasi THEN
+                INSERT log_aktifitas(users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT(menghapus Catatan Di lokasi:, old.lokasi),now(),3)
+            END IF;
+            RETURN NEW;
             END
             $$ LANGUAGE plpgsql;
             
