@@ -22,19 +22,19 @@ class CreateLogUsersTable extends Migration
             $table->timestamps();
         });
 
-        DB::unprepared('
-                CREATE TRIGGER update_email_users 
-                    BEFORE UPDATE 
-                    ON users
-                    FOR EACH ROW 
-                EXECUTE PROCEDURE
-                    INSERT log_users
-                    set nik = OLD.nik,
-                    email_lama = OLD.email,
-                    email_baru = NEW.email,
-                    created_at = NOW();
-                END
-        ;');
+        // DB::unprepared('
+        //         CREATE TRIGGER update_email_users 
+        //             BEFORE UPDATE 
+        //             ON users
+        //             FOR EACH ROW 
+        //         BEGIN
+        //             INSERT INTO log_users
+        //             set nik = OLD.nik,
+        //             email_lama = OLD.email,
+        //             email_baru = NEW.email,
+        //             created_at = NOW();
+        //         END
+        // ;');
 
         
     }
