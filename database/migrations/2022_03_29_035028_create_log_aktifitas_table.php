@@ -38,7 +38,7 @@ class CreateLogAktifitasTable extends Migration
             BEGIN
       
                 INSERT INTO log_aktifitas (users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT("menghapus Catatan Di lokasi:", old.lokasi),now(),3)
-         
+                RETURN NULL;
             END
             $$ LANGUAGE plpgsql;
             
