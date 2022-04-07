@@ -32,7 +32,7 @@ class CreateLogAktifitasTable extends Migration
         // ;');
 
 
-        DB::unprepared('
+        DB::unprepared(`
             CREATE OR REPLACE FUNCTION thapus_perjalanan()
             RETURNS trigger AS $$
             BEGIN
@@ -45,7 +45,7 @@ class CreateLogAktifitasTable extends Migration
             BEFORE DELETE ON perjalanans
             FOR EACH ROW
             EXECUTE PROCEDURE thapus_perjalanan()
-        ');
+        `);
 
         DB::unprepared("
             CREATE TRIGGER 'tupdate_perjalanan' 
