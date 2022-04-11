@@ -108,24 +108,24 @@
     });
     
 
-    // var mapCenter = [{{ request('latitude', config('leaflet.map_center_latitude')) }}, {{ request('longitude', config('leaflet.map_center_longitude')) }}];
-    // var map = L.map('mapid').setView(mapCenter, {{ config('leaflet.zoom_level') }});
+    var latlng = [{{ request('latitude', config('leaflet.map_center_latitude')) }}, {{ request('longitude', config('leaflet.map_center_longitude')) }}];
+    var map = L.map('mapid').setView(latlng, {{ config('leaflet.zoom_level') }});
     
-    navigator.geolocation.getCurrentPosition(function(location) {
-    var latlng = new L.LatLng(location.coords.latitude, location.coords.longitude);
+    // navigator.geolocation.getCurrentPosition(function(location) {
+    // var latlng = new L.LatLng(location.coords.latitude, location.coords.longitude);
 
-    var map = L.map('mapid').setView(latlng, {{ config('leaflet.zoom_level') }})
+    // var map = L.map('mapid').setView(latlng, {{ config('leaflet.zoom_level') }})
 
-    // L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-    //     maxZoom: 20,
-    //     subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-    // }).addTo(map);
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-		id: 'mapbox/satellite-v9'
-	}).addTo(map);
+    L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    }).addTo(map);
+    // L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+	// 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+	// 		'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+	// 		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+	// 	id: 'mapbox/satellite-v9'
+	// }).addTo(map);
     
 
     var marker = L.marker(latlng).addTo(map);
@@ -150,6 +150,6 @@
     }
     $('#latitude').on('input', updateMarkerByInputs);
     $('#longitude').on('input', updateMarkerByInputs);
-    });
+    // });
 </script>    
 @endsection
