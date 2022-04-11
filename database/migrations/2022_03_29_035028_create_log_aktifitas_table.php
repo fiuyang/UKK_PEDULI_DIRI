@@ -59,7 +59,7 @@ class CreateLogAktifitasTable extends Migration
             RETURNS trigger AS $$
             BEGIN
                 INSERT INTO log_aktifitas(users_id,aksi, waktu,tipe) VALUES (NEW.users_id,  CONCAT("Menambahkan Catatan Perjalanan Di lokasi : ", NEW.lokasi),now(), 1)
-                RETURN NEW;
+                RETURN null;
             END
             $$ LANGUAGE plpgsql;
             
