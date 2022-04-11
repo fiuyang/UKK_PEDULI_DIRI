@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -21,6 +20,8 @@ class CreatePerjalanansTable extends Migration
             $table->date('tanggal');
             $table->time('jam');
             $table->text('lokasi');
+            $table->string('latitude', 15)->nullable();
+            $table->string('longitude', 15)->nullable();
             $table->float('suhu_tubuh');
             $table->timestamps();
         });
@@ -29,7 +30,7 @@ class CreatePerjalanansTable extends Migration
         //             CREATE PROCEDURE `get_by_id` (IN `id` INT)
         //             BEGIN
         //                 SELECT * FROM perjalanans WHERE id = id;
-        //             END;";
+        //             END;";e
         // DB::unprepared($procedure);
 
 

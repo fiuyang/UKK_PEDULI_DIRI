@@ -17,6 +17,7 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css')}} ">
     <link rel="stylesheet" href="{{ asset('assets/css/components.css')}} ">
+    @yield('styles')
 </head>
 
 <body class="layout-3">
@@ -130,9 +131,9 @@
     <!-- Template JS File -->
     <script src="{{asset('assets/js/scripts.js')}}"></script>
     <script src="{{asset('assets/js/custom.js')}}"></script>
-    {{-- <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script> --}}
     <script src="{{ asset('assets/node_modules/instascan.min.js') }}"></script>
     <script src="{{ asset('assets/node_modules/timepicker/jquery.timepicker.js') }}"></script>
+
     @yield('script')
     <script>
         function logout() {

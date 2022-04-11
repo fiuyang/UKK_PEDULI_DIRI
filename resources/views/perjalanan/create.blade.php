@@ -57,7 +57,22 @@
                         <label for="suhu_tubuh">Suhu Tubuh</label>
                         <input type="text" class="form-control" name="suhu_tubuh" id="suhu_tubuh" value="{{ old('suhu_tubuh') }}">
                     </div>
-                    <div class="text-right">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="latitude" class="control-label">{{ __('latitude') }}</label>
+                                <input id="latitude" type="text" class="form-control{{ $errors->has('latitude') ? ' is-invalid' : '' }}" name="latitude" value="{{ old('latitude', request('latitude')) }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="longitude" class="control-label">{{ __('longitude') }}</label>
+                                <input id="longitude" type="text" class="form-control{{ $errors->has('longitude') ? ' is-invalid' : '' }}" name="longitude" value="{{ old('longitude', request('longitude')) }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mapid"></div>
+                    <div class="text-center mt-4">
                         <a href="{{ route('perjalanan.index') }}" class="btn btn-danger">Kembali</a>
                         <button class="btn btn-primary" type="submit">Store</button>
                     </div>
@@ -67,10 +82,21 @@
     </div>
 </div>
 @endsection
+@section('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+    integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+    crossorigin=""/>
+
+<style>
+    #mapid { height: 500px; }
+</style>
+@endsection
 
 @section('script')
+<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+    integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+    crossorigin=""></script>
 <script>
-
     $(document).ready(function () {
         $('.datepicker').daterangepicker({
             singleDatePicker: true,
@@ -80,6 +106,44 @@
             }
         });
     });
+    
 
+    // var mapCenter = [{{ request('latitude', config('leaflet.map_center_latitude')) }}, {{ request('longitude', config('leaflet.map_center_longitude')) }}];
+    // var map = L.map('mapid').setView(mapCenter, {{ config('leaflet.zoom_level') }});
+    
+    navigator.geolocation.getCurrentPosition(function(location) {
+    var latlng = new L.LatLng(location.coords.latitude, location.coords.longitude);
+
+    var map = L.map('mapid').setView(latlng, {{ config('leaflet.zoom_level') }})
+
+    L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    }).addTo(map);
+    
+
+    var marker = L.marker(latlng).addTo(map);
+    function updateMarker(lat, lng) {
+        marker
+        .setLatLng([lat, lng])
+        .bindPopup("Your location :  " + marker.getLatLng().toString())
+        .openPopup();
+        return false;
+    };
+
+    map.on('click', function(e) {
+        let latitude = e.latlng.lat.toString().substring(0, 15);
+        let longitude = e.latlng.lng.toString().substring(0, 15);
+        $('#latitude').val(latitude);
+        $('#longitude').val(longitude);
+        updateMarker(latitude, longitude);
+    });
+
+    var updateMarkerByInputs = function() {
+        return updateMarker( $('#latitude').val() , $('#longitude').val());
+    }
+    $('#latitude').on('input', updateMarkerByInputs);
+    $('#longitude').on('input', updateMarkerByInputs);
+    });
 </script>    
 @endsection

@@ -15,15 +15,15 @@
             </div>
             <div class="card-body">
                 @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <span class="alert-inner--icon"><i class="ni ni-like-2"></i></span>
-                        <span class="alert-inner--text">
-                            {{ session('success') }}
-                        </span>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span class="alert-inner--icon"><i class="ni ni-like-2"></i></span>
+                    <span class="alert-inner--text">
+                        {{ session('success') }}
+                    </span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 @endif
                 <div class="table-responsive">
                     <table id="table" class="table table-striped" width="100%">
@@ -34,6 +34,8 @@
                                 <th>Waktu</th>
                                 <th>Lokasi </th>
                                 <th>Suhu Tubuh</th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -46,16 +48,33 @@
     </div>
 </div>
 
+{{-- Modal Detail Perjalanan --}}
+<div class="modal fade" id="showPerjalanan" tabindex="-1" role="dialog" aria-labelledby="showModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Detail Perjalanan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="showBody">
+                <div>
+                    <!-- the result to be displayed apply here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
-
 @section('script')
 <script>
-
+    
     setTimeout(function() {
         $('.alert').slideUp();
     }, 5000);
-
+    
     $(document).ready(function() {
         dataTable = $('#table').DataTable({
             processing: true,
@@ -66,16 +85,45 @@
             "order": [[ 0, "desc" ]],
             ajax: '{{ route('perjalanan.get') }}',
             columns: [
-                {data: 'id', name: 'id'},
-                {data: 'tanggal', name: 'tanggal'},
-                {data: 'jam', name: 'jam'},
-                {data: 'lokasi', name: 'lokasi'},
-                {data: 'suhu_tubuh', name: 'suhu_tubuh'},
-                {data: 'actions', name: 'actions',orderable:false,serachable:false,sClass:'text-center'},
+            {data: 'id', name: 'id'},
+            {data: 'tanggal', name: 'tanggal'},
+            {data: 'jam', name: 'jam'},
+            {data: 'lokasi', name: 'lokasi'},
+            {data: 'suhu_tubuh', name: 'suhu_tubuh'},
+            {data: 'latitude', name: 'latitude'},
+            {data: 'longitude', name: 'longitude'},
+            {data: 'actions', name: 'actions',orderable:false,serachable:false,sClass:'text-center'},
             ]
         });
     });
-
+    
+    
+    $(document).on('click', '#show-perjalanan', function(event) {
+        event.preventDefault();
+        let href = $(this).attr('data-attr');
+        $.ajax({
+            url: href,
+            beforeSend: function() {
+                $('#loader').show();
+            },
+            // return the result
+            success: function(result) {
+                $('#showPerjalanan').modal("show");
+                $('#showBody').html(result).show();
+            },
+            complete: function() {
+                $('#loader').hide();
+            },
+            error: function(jqXHR, testStatus, error) {
+                console.log(error);
+                alert("Page " + href + " cannot open. Error:" + error);
+                $('#loader').hide();
+            },
+            timeout: 8000
+        })
+    });
+    
+    
     function destroy(id) {
         swal.fire({
             title: 'Delete',

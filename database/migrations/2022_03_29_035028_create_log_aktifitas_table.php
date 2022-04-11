@@ -24,6 +24,21 @@ class CreateLogAktifitasTable extends Migration
             $table->timestamps();
         });
 
+        DB::unprepared('
+            CREATE OR REPLACE FUNCTION thapus_perjalanan()
+            RETURNS trigger AS $$
+            BEGIN
+                INSERT log_aktifitas(users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT("menghapus Catatan Di lokasi: ", old.lokasi),now(),3 );
+                RETURN old;
+            END
+            $$ LANGUAGE plpgsql;
+            
+            CREATE TRIGGER timetable_range_trigger
+            BEFORE DELETE ON perjalanans
+            FOR EACH ROW
+            EXECUTE PROCEDURE thapus_perjalanan()
+        ');
+
         // DB::unprepared('
         //     CREATE TRIGGER `thapus_perjalanan`
         //     BEFORE DELETE ON `perjalanans` 

@@ -34,7 +34,6 @@ Route::post('login',   [AuthController::class, 'login'])->name('login');
 
 Route::middleware(['auth', 'cekLevel:admin,user'])->group(function () {
 
-    Route::group(['prefix' => 'admin'], function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/pengguna/get', [PenggunaController::class, 'get'])->name('pengguna.get');
@@ -51,13 +50,11 @@ Route::middleware(['auth', 'cekLevel:admin,user'])->group(function () {
         // change password
         Route::get('profile/password/{id}', [UserController::class, 'password'])->name('password');
         Route::put('profile/password/{id}', [UserController::class, 'changePassword'])->name('password.change');
-    });
 });
 
 
 Route::middleware(['auth', 'cekLevel:user'])->group(function () {
 
-    Route::group(['prefix' => 'user'], function () {
         Route::get('dashboard-user', [DashboardController::class, 'index'])->name('dashboard-user');
         Route::get('perjalanan/get', [PerjalananController::class, 'get'])->name('perjalanan.get');
         Route::resource('perjalanan', PerjalananController::class);
@@ -71,7 +68,6 @@ Route::middleware(['auth', 'cekLevel:user'])->group(function () {
         //change password
         // Route::get('profile/password/{id}', [UserController::class, 'password'])->name('password');
         // Route::put('profile/password/{id}', [UserController::class, 'changePassword'])->name('password.change');
-    });
 });
 
 
