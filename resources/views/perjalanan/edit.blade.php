@@ -99,7 +99,7 @@
 <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
     integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
     crossorigin=""></script>
-<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.74.0/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <script>
     $(document).ready(function () {
         $('.datepicker').daterangepicker({
@@ -119,8 +119,17 @@
         maxZoom: 20,
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     }).addTo(map);
-    
-    L.control.locate().addTo(map);
+
+    L.Control.geocoder().addTo(map);
+
+    if (!navigator.geolocation) {
+        swal.fire("Error!", 'Browser Kamu Tidak Mendukung Geolocation Sekarang.', "error");
+        // console.log("Your browser doesn't support geolocation feature!")
+    } else {
+        setInterval(() => {
+            navigator.geolocation.getCurrentPosition(getPosition)
+        }, 5000);
+    };
 
     var marker = L.marker(latlng).addTo(map);
     function updateMarker(lat, lng) {
