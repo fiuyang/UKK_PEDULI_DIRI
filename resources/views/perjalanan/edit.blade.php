@@ -89,7 +89,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
     integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
     crossorigin=""/>
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 <style>
     #mapid { height: 500px; }
 </style>
@@ -110,27 +110,50 @@
             }
         });
     });
-        
-    var latlng =  [{{ $perjalanan->latitude }}, {{ $perjalanan->longitude }}];
 
+    var latlng =  [{{ $perjalanan->latitude }}, {{ $perjalanan->longitude }}];
     var map = L.map('mapid').setView(latlng, {{ config('leaflet.zoom_level') }})
 
-    L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+    var osm = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
         maxZoom: 20,
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     }).addTo(map);
 
     L.Control.geocoder().addTo(map);
-
     if (!navigator.geolocation) {
-        swal.fire("Error!", 'Browser Kamu Tidak Mendukung Geolocation Sekarang.', "error");
-        // console.log("Your browser doesn't support geolocation feature!")
+        swal.fire("Error!", 'Your browser doesnt support geolocation feature.', "error");
     } else {
         setInterval(() => {
             navigator.geolocation.getCurrentPosition(getPosition)
         }, 5000);
     };
 
+    var marker, circle, lat, long, accuracy;
+
+    function getPosition(position) {
+        // console.log(position)
+        lat = position.coords.latitude
+        long = position.coords.longitude
+        accuracy = position.coords.accuracy
+
+        if (marker) {
+            map.removeLayer(marker)
+        }
+
+        if (circle) {
+            map.removeLayer(circle)
+        }
+
+        marker = L.marker([lat, long])
+        circle = L.circle([lat, long], { radius: accuracy })
+
+        var featureGroup = L.featureGroup([marker, circle]).addTo(map)
+
+        map.fitBounds(featureGroup.getBounds())
+
+        // swal.fire("info!", "Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy", "'info'")");
+        // alert("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy);
+    }
     var marker = L.marker(latlng).addTo(map);
     function updateMarker(lat, lng) {
         marker
@@ -139,7 +162,6 @@
         .openPopup();
         return false;
     };
-
     map.on('click', function(e) {
         let latitude = e.latlng.lat.toString().substring(0, 15);
         let longitude = e.latlng.lng.toString().substring(0, 15);
@@ -147,7 +169,6 @@
         $('#longitude').val(longitude);
         updateMarker(latitude, longitude);
     });
-
     var updateMarkerByInputs = function() {
         return updateMarker( $('#latitude').val() , $('#longitude').val());
     }
