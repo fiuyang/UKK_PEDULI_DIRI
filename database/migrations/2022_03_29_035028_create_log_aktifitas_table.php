@@ -58,7 +58,7 @@ class CreateLogAktifitasTable extends Migration
             CREATE OR REPLACE FUNCTION tcreate_perjalanan()
             RETURNS trigger AS $$
             BEGIN
-                INSERT INTO log_aktifitas(users_id,aksi, waktu,tipe) VALUES (NEW.users_id,  CONCAT(Menambahkan,' ',Catatan,' ',Perjalanan,' ',Di,' ',lokasi,' ',NEW.lokasi),now(), 1);
+                INSERT INTO log_aktifitas(users_id,aksi, waktu,tipe) VALUES (NEW.users_id,  CONCAT('Menambahkan','Catatan','Perjalanan','Di','lokasi',NEW.lokasi) AS CONCAT_CREATE,now(), 1);
                 RETURN null;
             END
             $$ LANGUAGE plpgsql;
