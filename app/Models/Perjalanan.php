@@ -15,7 +15,7 @@ class Perjalanan extends Model
         'coordinate', 'map_popup_content',
     ];
 
-    public function view_users() {
+    public function users() {
         return $this->belongsTo(User::class, 'users_id');
     }
 

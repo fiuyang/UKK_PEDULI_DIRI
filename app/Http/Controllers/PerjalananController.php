@@ -25,9 +25,7 @@ class PerjalananController extends Controller
 
     public function get()
     {
-        $data = Perjalanan::orderBy('id', 'ASC')->where([
-            'users_id' => auth()->user()->id
-        ]);
+        $data = Perjalanan::with('users')->orderBy('id', 'ASC')->where(['users_id' => auth()->user()->id]);
         return DataTables::of($data)
             ->addColumn('tanggal', function ($request) {
                 $date = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('d-M-Y');
