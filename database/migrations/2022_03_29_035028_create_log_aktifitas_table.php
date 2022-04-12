@@ -54,20 +54,20 @@ class CreateLogAktifitasTable extends Migration
             EXECUTE PROCEDURE tupdate_perjalanan()
         ');
 
-        DB::unprepared('
-            CREATE OR REPLACE FUNCTION tcreate_perjalanan()
-            RETURNS trigger AS $$
-            BEGIN
-                INSERT INTO log_aktifitas(users_id,aksi, waktu,tipe) VALUES (NEW.users_id,  CONCAT(Menambahkan Catatan Perjalanan Di lokasi :, NEW.lokasi),now(), 1);
-                RETURN null;
-            END
-            $$ LANGUAGE plpgsql;
+        // DB::unprepared('
+        //     CREATE OR REPLACE FUNCTION tcreate_perjalanan()
+        //     RETURNS trigger AS $$
+        //     BEGIN
+        //         INSERT INTO log_aktifitas(users_id,aksi, waktu,tipe) VALUES (NEW.users_id,  CONCAT(Menambahkan Catatan Perjalanan Di lokasi :, NEW.lokasi),now(), 1);
+        //         RETURN null;
+        //     END
+        //     $$ LANGUAGE plpgsql;
             
-            CREATE TRIGGER tcreate_perjalanan
-            BEFORE INSERT ON perjalanans
-            FOR EACH ROW
-            EXECUTE PROCEDURE tcreate_perjalanan()
-        ');
+        //     CREATE TRIGGER tcreate_perjalanan
+        //     BEFORE INSERT ON perjalanans
+        //     FOR EACH ROW
+        //     EXECUTE PROCEDURE tcreate_perjalanan()
+        // ');
 
         // DB::unprepared('
         //     CREATE TRIGGER `thapus_perjalanan`
