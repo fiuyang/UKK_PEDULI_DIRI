@@ -18,7 +18,7 @@ class CreateLogAktifitasTable extends Migration
             $table->id();
             $table->unsignedBigInteger('users_id');
             $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
-            $table->longtext('aksi');
+            $table->longtext('lokasi');
             $table->datetime('waktu');
             $table->integer('tipe');
             $table->timestamps();
@@ -58,7 +58,7 @@ class CreateLogAktifitasTable extends Migration
             CREATE OR REPLACE FUNCTION tcreate_perjalanan()
             RETURNS trigger AS $$
             BEGIN
-                INSERT INTO log_aktifitas(users_id,aksi,waktu,tipe) SELECT (NEW.users_id,CONCAT("aksi",NEW.lokasi),now(), 1);
+                INSERT INTO log_aktifitas(users_id,aktifitas,waktu,tipe) SELECT (NEW.users_id, NEW.lokasi, now(), tipe);
                 RETURN null;
             END
             $$ LANGUAGE plpgsql;
@@ -75,7 +75,7 @@ class CreateLogAktifitasTable extends Migration
         //     FOR EACH ROW 
         //     INSERT log_aktifitas(users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT("menghapus Catatan Di lokasi: ", old.lokasi),now(),3 )
         // ;');
-
+    //   INSERT INTO log_aktifitas(users_id,aksi,waktu,tipe) SELECT (NEW.users_id,CONCAT("aksi",NEW.lokasi),now(), 1);
         // DB::unprepared('
         //     CREATE TRIGGER `tupdate_perjalanan` 
         //     BEFORE UPDATE ON `perjalanans` 
