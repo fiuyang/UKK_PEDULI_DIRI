@@ -28,7 +28,7 @@ class CreateLogAktifitasTable extends Migration
             CREATE OR REPLACE FUNCTION thapus_perjalanan()
             RETURNS trigger AS $$
             BEGIN
-                INSERT INTO log_aktifitas (users_id,aksi, waktu,tipe) VALUES (old.users_id, CONCAT("menghapus Catatan Di lokasi: ", old.lokasi),now(), 3);
+                INSERT INTO log_aktifitas(users_id,aksi, waktu,tipe) SELECT (old.users_id, CONCAT("menghapus Catatan Di lokasi: ", old.lokasi),now(),3 );
                 RETURN old;
             END
             $$ LANGUAGE plpgsql;
@@ -43,7 +43,7 @@ class CreateLogAktifitasTable extends Migration
             CREATE OR REPLACE FUNCTION tupdate_perjalanan()
             RETURNS trigger AS $$
             BEGIN
-                INSERT INTO log_aktifitas(users_id,aksi, waktu, tipe) VALUES (old.users_id ,CONCAT("mengubah Catatan Perjalanan Di lokasi: ", old.lokasi ,"Menjadi :", new.lokasi  ),now(), 2);
+                INSERT INTO log_aktifitas(users_id,aksi, waktu, tipe) SELECT (old.users_id ,CONCAT("mengubah Catatan Perjalanan Di lokasi: ", old.lokasi ,"Menjadi :", new.lokasi  ),now(), 2);
                 RETURN old;
             END
             $$ LANGUAGE plpgsql;
@@ -58,7 +58,7 @@ class CreateLogAktifitasTable extends Migration
             CREATE OR REPLACE FUNCTION tcreate_perjalanan()
             RETURNS trigger AS $$
             BEGIN
-                INSERT INTO log_aktifitas(users_id,aksi, waktu,tipe) VALUES (NEW.users_id,  CONCAT("Menambahkan Catatan Perjalanan Dilokasi:",NEW.lokasi),now(), 1);
+                INSERT INTO log_aktifitas(users_id,aksi, waktu,tipe) SELECT (NEW.users_id,  CONCAT("Menambahkan Catatan Perjalanan Di lokasi : ", NEW.lokasi),now(), 1);
                 RETURN null;
             END
             $$ LANGUAGE plpgsql;
